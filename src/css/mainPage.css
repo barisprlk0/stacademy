@@ -114,7 +114,6 @@
     outline: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     background-color: white;
-    /* Fixed from 'red' back to white or removed if transparent desired */
 }
 
 .search-icon {
