@@ -28,7 +28,11 @@ function MainPage() {
         <h2 className="lastAdds">Son Eklenenler</h2>
         <hr />
       </div>
+
       <div className="row mt-3 ">
+        <div className="col-9">
+    <div className="row">
+
         <div className="col-4 mb-3">
           <MainCardComponent />
         </div>
@@ -40,6 +44,15 @@ function MainPage() {
         </div>
         <div className="col-4 mb-3">
           <MainCardComponent />
+        </div>
+        </div>
+    </div>
+        <div className="col-3">
+          <div className="row">
+            <div className="col-12 mb-3">
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
