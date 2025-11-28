@@ -1,0 +1,16 @@
+.yarrak .customButton {
+    background-color: #526CC9;
+    border: none;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    padding: 35px;
+    transition: 0.3s;
+}
+
+.yarrak .customButton:hover {
+    background-color: #526CC9;
+    color: white;
+    opacity: 0.90;
+    transition: 0.3s;
+}

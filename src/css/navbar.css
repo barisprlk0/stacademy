@@ -25,16 +25,23 @@
     font-size: 18px;
     font-weight: 500;
     cursor: pointer;
-    transition:0.3s;
+    transition: 0.3s;
 }
+
 .navbar-link:hover {
 
-    transition:0.3s;
+    transition: 0.3s;
 }
+
 .navbar-right {
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+.navbar-auth-links {
+    display: flex;
+    gap: 20px;
 }
 
 .navbar-profile {

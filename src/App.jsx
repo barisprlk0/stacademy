@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import MainPage from './pages/MainPage.jsx'
+import MainPage from './pages/MainPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 
 import './App.css'
@@ -7,9 +8,7 @@ import CourseDetailInfoCard from './components/courseDetailInfoCard'
 function HomePage() {
   const navigate = useNavigate();
     <div>
-      <button onClick={() => navigate("/home")} className="m-3">
-        Go to home
-      </button>
+
 
     </div>
 }
@@ -21,8 +20,7 @@ function App() {
     <Router>
 <Routes>
           <Route path="/" element={<MainPage/>} />
-
-        <Route path="/home" element={<HomePage/>} />
+        <Route path="/register" element={<RegisterPage/>} />
 
 </Routes>
     </Router>
