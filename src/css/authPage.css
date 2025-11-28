@@ -1,9 +1,3 @@
-.customButton{
-        background-color: #526CC9;
-    border: none;
-    color: white;
-    text-align: center;
-    cursor: pointer;
-    padding: 35px;
-    transition: 0.3s;
+.authImage{
+    border-radius: 10px;
 }

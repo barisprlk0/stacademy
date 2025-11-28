@@ -50,7 +50,7 @@ function LoginPage() {
             </div>
             
             <div className="col-8">
-                <img src="https://picsum.photos/800/600" alt="Register" className="authImage" />
+                <img src="https://picsum.photos/800/600" alt="Register" className=" authImage " />
             </div>
 
             </div>

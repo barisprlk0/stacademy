@@ -36,7 +36,6 @@ function Navbar() {
                             <span className="navbar-profile-role ">Akdeniz Üniversitesi<br />CSE</span>
                         </div>
                     </div>
-               
             </div>
         </div>
     );
