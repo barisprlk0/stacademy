@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar.jsx';
 import '../css/authPage.css';
 import {useNavigate} from 'react-router-dom';
@@ -356,11 +356,52 @@ const departments = [
     "Yapı Denetimi",
     "Ziraat Mühendisliği",
 ];
+
+
 function RegisterPage() {
+    const [name,setName] = useState("");
+const [surname,setSurname] = useState("");
+const [email,setEmail] = useState("");
+const [password,setPassword] = useState("");
+const [uni,setUni] = useState("");
+const [dep,setDep] = useState("");
+
     const navigate = useNavigate();
     const goToLogin = () => {
         navigate('/login');
     };
+
+
+    const handleRegister = async() => {
+    if(name=="" || surname=="" || email=="" || password=="" || uni=="" || dep==""){
+      alert("Lütfen tüm alanları doldurunuz.");
+      return;
+    }
+
+    try{
+      const userCredential= await createUserWithEmailAndPassword(auth, email, password);
+      const userDocref=(doc(db,"users",userCredential.user.uid));
+      await setDoc(userDocref,{
+        name:name,
+        surname:surname,
+        email:email,
+        uni: uni,
+        dep: dep,
+      })
+
+      alert("Kayıt Başarılı");
+      navigate("/login");
+
+    }catch(error){
+      if(error instanceof Error){
+        alert(error.message);
+      } else{
+        alert("Kayıt sırasında bir hata oluştu.");
+      }
+    }
+  };
+
+    
     return (
         <div className="registerPage">
             <Navbar  />
@@ -371,33 +412,29 @@ function RegisterPage() {
                 <div className="form-group">
                     <div className="d-flex flex-column align-items-start">
                     <h5 className="m-0 mx-2">Ad </h5> 
-                    <input type="text" placeholder="Kaan" className="authInput form-control w-100 mb-3" />
+                    <input type="text" placeholder="Kaan" value={name} onChange={(e)=>setName(e.target.value)} className="authInput form-control w-100 mb-3" />
                     </div>
 
 
                     <div className="d-flex flex-column align-items-start">
                     <h5 className="m-0 mx-2">Soyad </h5> 
-                    <input type="text" placeholder="Beşe" className="authInput form-control w-100 mb-3" />
+                    <input type="text" placeholder="Beşe" value ={surname} onChange={(e)=>setSurname(e.target.value)} className="authInput form-control w-100 mb-3" />
                     </div>
 
                     <div className="d-flex flex-column align-items-start">
                     <h5 className="m-0 mx-2">E-Posta </h5> 
-                    <input type="email" placeholder="kaanbese@gmail.com" className="authInput form-control w-100 mb-3" />
+                    <input type="email" placeholder="kaanbese@gmail.com" value={email} onChange={(e)=>setEmail(e.target.value)} className="authInput form-control w-100 mb-3" />
                     </div>
 
                     <div className="d-flex flex-column align-items-start">
                     <h5 className="m-0 mx-2">Şifre </h5> 
-                    <input type="password" placeholder="•••••••••••" className="authInput form-control w-100 mb-3" />
-                    </div>
-
-                    
-                    <div className="d-flex flex-column align-items-start">
-                    <h5 className="m-0 mx-2">Tekrar Şifreniz </h5> 
-                    <input type="password" placeholder="•••••••••••" className="authInput form-control w-100 mb-3" />
+                    <input type="password" placeholder="•••••••••••" value={password} onChange={(e)=>setPassword(e.target.value)} className="authInput form-control w-100 mb-3" />
                     </div>
 
 
-                    <select className="authInput form-control w-100 mb-3" defaultValue="">
+
+
+                    <select value={uni} onChange={(e)=>setUni(e.target.value)} className="authInput form-control w-100 mb-3">
                                 <option value="" disabled>Üniversitenizi Seçiniz</option>
                                 {universities.map((uni, index) => (
                                     <option key={index} value={uni}>
@@ -406,7 +443,7 @@ function RegisterPage() {
                                 ))}
                     </select>
 
-                    <select className="authInput form-control w-100 mb-3" defaultValue="">
+                    <select value={dep} onChange={(e)=>setDep(e.target.value)} className="authInput form-control w-100 mb-3">
                                 <option value="" disabled>Bölümünüzü Seçiniz</option>
                                 {departments.map((dept, index) => (
                                     <option key={index} value={dept}>
@@ -419,9 +456,9 @@ function RegisterPage() {
 
             </div>
 
-            <div class="d-flex justify-content-between align-items-start mt-3" >
+            <div className="d-flex justify-content-between align-items-start mt-3" >
                 <p className='btn btn-link' onClick={goToLogin} > Zaten bir hesabınız var mı, giriş yap. </p>
-                <CustomButton text="Kayıt Ol" />
+                <CustomButton onClick={handleRegister} text="Kayıt Ol" />
                 </div>            
 
 
