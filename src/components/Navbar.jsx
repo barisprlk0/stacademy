@@ -3,7 +3,7 @@ import '../css/navbar.css';
 import { useNavigate } from 'react-router-dom';
 
 
-function Navbar({ isAuth }) {
+function Navbar() {
     const navigate = useNavigate();
     const goToHome = () => {
         navigate('/');
@@ -16,7 +16,7 @@ function Navbar({ isAuth }) {
     };
 
     return (
-        <div className="navbar">
+        <div className="navbar mt-0">
             <div className="navbar-brand navbar-link fw-bold" onClick={goToHome}>Ana Sayfa</div>
             <div className="navbar-center">
                 <a onClick={goToHome} className="navbar-link" >Ders Al</a>
