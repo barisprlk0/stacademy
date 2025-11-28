@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar.jsx';
 import '../css/authPage.css';
 import {useNavigate} from 'react-router-dom';
-
+import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
+import { auth, db } from '../config/firebase.js';
+import { doc, setDoc } from 'firebase/firestore';
 import CustomButton from '../components/CustomButton.jsx';
 const universities = [
   "Abdullah Gül Üniversitesi",
@@ -360,11 +362,11 @@ const departments = [
 
 function RegisterPage() {
     const [name,setName] = useState("");
-const [surname,setSurname] = useState("");
-const [email,setEmail] = useState("");
-const [password,setPassword] = useState("");
-const [uni,setUni] = useState("");
-const [dep,setDep] = useState("");
+    const [surname,setSurname] = useState("");
+    const [email,setEmail] = useState("");
+    const [password,setPassword] = useState("");
+    const [uni,setUni] = useState("");
+    const [dep,setDep] = useState("");
 
     const navigate = useNavigate();
     const goToLogin = () => {
@@ -408,34 +410,38 @@ const [dep,setDep] = useState("");
                 <div className="row mt-5">
         <div className="col-4 ">
             <div className="authContainer ">
+                
                 <h2 className="authTitle">Kayıt Ol</h2>
                 <div className="form-group">
                     <div className="d-flex flex-column align-items-start">
                     <h5 className="m-0 mx-2">Ad </h5> 
-                    <input type="text" placeholder="Kaan" value={name} onChange={(e)=>setName(e.target.value)} className="authInput form-control w-100 mb-3" />
+                    <input type="text" placeholder="Kaan" id="name"
+                    value={name} 
+                    onChange={(e)=>setName(e.target.value)} 
+                    className="authInput form-control w-100 mb-3" />
                     </div>
 
 
                     <div className="d-flex flex-column align-items-start">
                     <h5 className="m-0 mx-2">Soyad </h5> 
-                    <input type="text" placeholder="Beşe" value ={surname} onChange={(e)=>setSurname(e.target.value)} className="authInput form-control w-100 mb-3" />
+                    <input  type="text" placeholder="Beşe" id="surname" value ={surname} onChange={(e)=>setSurname(e.target.value)} className="authInput form-control w-100 mb-3" />
                     </div>
 
                     <div className="d-flex flex-column align-items-start">
                     <h5 className="m-0 mx-2">E-Posta </h5> 
-                    <input type="email" placeholder="kaanbese@gmail.com" value={email} onChange={(e)=>setEmail(e.target.value)} className="authInput form-control w-100 mb-3" />
+                    <input type="email" placeholder="kaanbese@gmail.com" id="email" value={email} onChange={(e)=>setEmail(e.target.value)} className="authInput form-control w-100 mb-3" />
                     </div>
 
                     <div className="d-flex flex-column align-items-start">
                     <h5 className="m-0 mx-2">Şifre </h5> 
-                    <input type="password" placeholder="•••••••••••" value={password} onChange={(e)=>setPassword(e.target.value)} className="authInput form-control w-100 mb-3" />
+                    <input type="password" placeholder="•••••••••••" id="password" value={password} onChange={(e)=>setPassword(e.target.value)} className="authInput form-control w-100 mb-3" />
                     </div>
 
 
 
 
-                    <select value={uni} onChange={(e)=>setUni(e.target.value)} className="authInput form-control w-100 mb-3">
-                                <option value="" disabled>Üniversitenizi Seçiniz</option>
+                    <select value={uni} id='uni' onChange={(e)=>setUni(e.target.value)} className="authInput form-control w-100 mb-3">
+                                <option  disabled>Üniversitenizi Seçiniz</option>
                                 {universities.map((uni, index) => (
                                     <option key={index} value={uni}>
                                         {uni}
@@ -443,8 +449,8 @@ const [dep,setDep] = useState("");
                                 ))}
                     </select>
 
-                    <select value={dep} onChange={(e)=>setDep(e.target.value)} className="authInput form-control w-100 mb-3">
-                                <option value="" disabled>Bölümünüzü Seçiniz</option>
+                    <select value={dep} id='dep' onChange={(e)=>setDep(e.target.value)} className="authInput form-control w-100 mb-3">
+                                <option   disabled>Bölümünüzü Seçiniz</option>
                                 {departments.map((dept, index) => (
                                     <option key={index} value={dept}>
                                         {dept}
@@ -458,7 +464,7 @@ const [dep,setDep] = useState("");
 
             <div className="d-flex justify-content-between align-items-start mt-3" >
                 <p className='btn btn-link' onClick={goToLogin} > Zaten bir hesabınız var mı, giriş yap. </p>
-                <CustomButton onClick={handleRegister} text="Kayıt Ol" />
+                <CustomButton myMethod={handleRegister} text="Kayıt Ol" />
                 </div>            
 
 
