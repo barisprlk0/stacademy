@@ -5,7 +5,7 @@ function CourseDetailInfoCard(){
    
     <div className="col-md-8 infoCardContent">
       <h2 className="fw-bold mb-3 infoCardTitle">Robotik Kodlama</h2>
-      <p className="text-muted lh-lg infoCardDescription">
+      <p className="text-muted infoCardDescription">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. In semper
         consequat varius. Praesent a tortor tellus. Phasellus id augue eros.
         Aenean molestie blandit eleifend. Pellentesque a turpis erat. Vestibulum
