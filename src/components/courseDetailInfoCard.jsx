@@ -20,7 +20,7 @@ function CourseDetailInfoCard(){
         <img 
           src="https://picsum.photos/200"
           alt="Murat K."
-          className="rounded-circle mb-3"
+          className="rounded-circle mb-3 infoCardInstructorImage"
           style={{ width: 72, height: 72, objectFit: 'cover' }}
         />
         <h5 className="fw-semibold mb-1 infoCardInstructorName">Murat K.</h5>
