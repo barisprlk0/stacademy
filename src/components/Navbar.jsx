@@ -17,7 +17,7 @@ function Navbar({ isAuth }) {
 
     return (
         <div className="navbar">
-            <div className="navbar-brand" onClick={goToHome} style={{ cursor: 'pointer' }}>Ana Sayfa</div>
+            <div className="navbar-brand navbar-link fw-bold" onClick={goToHome}>Ana Sayfa</div>
             <div className="navbar-center">
                 <a onClick={goToHome} className="navbar-link" >Ders Al</a>
                 <a href="#" className="navbar-link">Ders Ver</a>

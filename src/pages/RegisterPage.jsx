@@ -1,6 +1,8 @@
 import React from 'react';
 import Navbar from '../components/Navbar.jsx';
 import '../css/authPage.css';
+import {useNavigate} from 'react-router-dom';
+
 import CustomButton from '../components/CustomButton.jsx';
 const universities = [
   "Abdullah Gül Üniversitesi",
@@ -355,6 +357,10 @@ const departments = [
     "Ziraat Mühendisliği",
 ];
 function RegisterPage() {
+    const navigate = useNavigate();
+    const goToLogin = () => {
+        navigate('/login');
+    };
     return (
         <div className="registerPage">
             <Navbar  />
@@ -414,7 +420,7 @@ function RegisterPage() {
             </div>
 
             <div class="d-flex justify-content-between align-items-start mt-3" >
-                <p className='btn btn-link' > Zaten bir hesabınız var mı, giriş yap. </p>
+                <p className='btn btn-link' onClick={goToLogin} > Zaten bir hesabınız var mı, giriş yap. </p>
                 <CustomButton text="Kayıt Ol" />
                 </div>            
 
