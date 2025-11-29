@@ -152,6 +152,11 @@
     background-color: #e9ecef;
 }
 
+.filter-btn.active {
+    background-color: #526CC9;
+    color: white;
+}
+
 .title-section {
     padding: 0 40px;
     margin-top: 20px;

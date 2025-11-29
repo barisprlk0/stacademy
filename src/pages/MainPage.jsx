@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import '../css/mainPage.css';
 import MainCardComponent from '../components/MainCardComponent.jsx';
 import Navbar from '../components/Navbar.jsx';
-import {IoMdSearch , IoMdCodeWorking} from "react-icons/io";
+import { IoMdSearch, IoMdCodeWorking } from "react-icons/io";
 import { LuPenTool } from "react-icons/lu";
 import { BiMath } from "react-icons/bi";
-import { FaPaintBrush,FaGuitar } from "react-icons/fa";
+import { FaPaintBrush, FaGuitar } from "react-icons/fa";
 import { db } from '../config/firebase.js';
 import { collection, getDocs, query, orderBy, limit, doc, getDoc } from 'firebase/firestore';
 
@@ -13,6 +13,7 @@ function MainPage({ currentUser }) {
   const [courses, setCourses] = useState([]);
   const [coursesWithInstructors, setCoursesWithInstructors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -20,7 +21,7 @@ function MainPage({ currentUser }) {
         const coursesRef = collection(db, 'courses');
         const q = query(coursesRef, orderBy('createdAt', 'desc'), limit(12));
         const querySnapshot = await getDocs(q);
-        
+
         const coursesData = [];
         querySnapshot.forEach((doc) => {
           coursesData.push({ id: doc.id, ...doc.data() });
@@ -69,6 +70,18 @@ function MainPage({ currentUser }) {
     fetchCourses();
   }, []);
 
+  const handleCategoryClick = (category) => {
+    if (selectedCategory === category) {
+      setSelectedCategory(null);
+    } else {
+      setSelectedCategory(category);
+    }
+  };
+
+  const filteredCourses = selectedCategory
+    ? coursesWithInstructors.filter(course => course.courseCategory === selectedCategory)
+    : coursesWithInstructors;
+
   return (
     <div className="mainPage">
       <Navbar currentUser={currentUser} />
@@ -78,11 +91,36 @@ function MainPage({ currentUser }) {
           <span className="search-icon"> <IoMdSearch size={25} /> </span>
         </div>
         <div className="filter-buttons">
-          <button className="filter-btn">  <IoMdCodeWorking size={25} /> Kodlama</button>
-          <button className="filter-btn"><LuPenTool size={25} /> Tasarım</button>
-          <button className="filter-btn"><BiMath size={25} />Matematik</button>
-          <button className="filter-btn"><FaPaintBrush size={25} /> Resim</button>
-          <button className="filter-btn"> <FaGuitar size={25} />Enstrüman</button>
+          <button
+            className={`filter-btn ${selectedCategory === 'Kodlama' ? 'active' : ''}`}
+            onClick={() => handleCategoryClick('Kodlama')}
+          >
+            <IoMdCodeWorking size={25} /> Kodlama
+          </button>
+          <button
+            className={`filter-btn ${selectedCategory === 'Tasarım' ? 'active' : ''}`}
+            onClick={() => handleCategoryClick('Tasarım')}
+          >
+            <LuPenTool size={25} /> Tasarım
+          </button>
+          <button
+            className={`filter-btn ${selectedCategory === 'Matematik' ? 'active' : ''}`}
+            onClick={() => handleCategoryClick('Matematik')}
+          >
+            <BiMath size={25} />Matematik
+          </button>
+          <button
+            className={`filter-btn ${selectedCategory === 'Resim' ? 'active' : ''}`}
+            onClick={() => handleCategoryClick('Resim')}
+          >
+            <FaPaintBrush size={25} /> Resim
+          </button>
+          <button
+            className={`filter-btn ${selectedCategory === 'Enstürman' ? 'active' : ''}`}
+            onClick={() => handleCategoryClick('Enstürman')}
+          >
+            <FaGuitar size={25} />Enstrüman
+          </button>
         </div>
       </div>
       <div className="title-section">
@@ -97,10 +135,10 @@ function MainPage({ currentUser }) {
               <div className="col-12 text-center">
                 <p>Yükleniyor...</p>
               </div>
-            ) : coursesWithInstructors.length > 0 ? (
-              coursesWithInstructors.map((course) => (
+            ) : filteredCourses.length > 0 ? (
+              filteredCourses.map((course) => (
                 <div key={course.id} className="col-4 mb-3">
-                  <MainCardComponent 
+                  <MainCardComponent
                     course={course}
                     instructorName={course.instructorName}
                     instructorImage={course.instructorImage}
@@ -109,7 +147,7 @@ function MainPage({ currentUser }) {
               ))
             ) : (
               <div className="col-12 text-center">
-                <p>Henüz kurs bulunmamaktadır.</p>
+                <p>{selectedCategory ? 'Bu kategoride henüz kurs bulunmamaktadır.' : 'Henüz kurs bulunmamaktadır.'}</p>
               </div>
             )}
           </div>
