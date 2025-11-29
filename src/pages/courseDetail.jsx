@@ -27,10 +27,10 @@ const CourseDetailPage = ({ currentUser }) => {
             }
           }
         } else {
-          console.log("No cocoruseurse");
+          console.log("------");
         }
       } catch (error) {
-        console.error("Kurs detayları gelmemesi: ", error);
+        console.error("Kurs detayları gelmedi seebep: : ", error);
       } finally {
         setLoading(false);
       }
