@@ -12,7 +12,7 @@ function CustomButton(props) {
     };
 
     return (
-        <div className="yarrak">
+        <div className="buttonContainer">
             <button onClick={handleClick} className="btn customButton py-1">
                 <span className="customButtonText fw-bold"> {text} </span>
             </button>

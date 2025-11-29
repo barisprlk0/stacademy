@@ -53,7 +53,6 @@ const handleAddCourse = async () => {
             return;
         }
 
-        // Form doğrulama (Sayı kontrolü için enrollSize'ı string olarak da kontrol ettik)
         if (courseName === "" || courseCategory === "" || courseDescription === "" || courseIntroduction === "" || !courseImage || courseLevel === "" || enrollSize === "") {
             alert("Lütfen tüm alanları doldurunuz.");
             return;
@@ -65,10 +64,8 @@ const handleAddCourse = async () => {
                 uploadedImageUrl = await uploadImage(courseImage, currentUser.uid);
             }
 
-            // 2. Veritabanı referansı (Burası tek segment olmalı: "courses")
             const courseRef = collection(db, "courses");
             
-            // 3. Veriyi kaydetme
             await addDoc(courseRef, {
                 courseName: courseName,
                 courseCategory: courseCategory,

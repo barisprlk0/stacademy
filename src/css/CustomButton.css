@@ -1,4 +1,4 @@
-.yarrak .customButton {
+.buttonContainer .customButton {
     background-color: #526CC9;
     border: none;
     color: white;
@@ -8,7 +8,7 @@
     transition: 0.3s;
 }
 
-.yarrak .customButton:hover {
+.buttonContainer .customButton:hover {
     background-color: #526CC9;
     color: white;
     opacity: 0.90;

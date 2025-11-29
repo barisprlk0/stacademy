@@ -17,7 +17,6 @@ function MainPage({ currentUser }) {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // Fetch courses ordered by creation date (newest first)
         const coursesRef = collection(db, 'courses');
         const q = query(coursesRef, orderBy('createdAt', 'desc'), limit(12));
         const querySnapshot = await getDocs(q);
@@ -29,7 +28,6 @@ function MainPage({ currentUser }) {
 
         setCourses(coursesData);
 
-        // Fetch instructor data for each course
         const coursesWithInstructorData = await Promise.all(
           coursesData.map(async (course) => {
             try {

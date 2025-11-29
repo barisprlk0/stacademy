@@ -3,7 +3,6 @@ import '../css/mainPage.css';
 
 
 function MainCardComponent({ course, instructorName, instructorImage }) {
-  // Format instructor name (e.g., "John Doe" -> "John D.")
   const formatName = (name) => {
     if (!name) return 'İsimsiz';
     const parts = name.trim().split(' ');
