@@ -2,32 +2,28 @@ import React, { useState, useEffect, useRef } from 'react';
 import { db } from '../config/firebase';
 import { collection, query, where, onSnapshot, addDoc, orderBy, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { IoMdChatbubbles, IoMdClose, IoMdSend } from "react-icons/io";
-import '../css/chatWidget.css'; // Birazdan oluşturacağız
+import '../css/chatWidget.css'; 
 
 const ChatWidget = ({ currentUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [chats, setChats] = useState([]);
-  const [activeChat, setActiveChat] = useState(null); // Şu an açık olan konuşma
+  const [activeChat, setActiveChat] = useState(null); 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [otherUserNames, setOtherUserNames] = useState({}); // ID -> İsim eşleşmesi
+  const [otherUserNames, setOtherUserNames] = useState({}); 
 
-  // 1. Kullanıcının dahil olduğu sohbetleri getir
+  
   useEffect(() => {
     if (!currentUser) return;
 
     const chatsRef = collection(db, 'chats');
-    // participants dizisi currentUser.uid içeriyorsa getir
     const q = query(chatsRef, where('participants', 'array-contains', currentUser.uid));
-
     const unsubscribe = onSnapshot(q, async (snapshot) => {
       const chatsData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
       setChats(chatsData);
-
-      // Sohbetlerdeki diğer kişilerin isimlerini çekelim
       const names = {};
       for (const chat of chatsData) {
         const otherUserId = chat.participants.find(uid => uid !== currentUser.uid);
@@ -47,7 +43,6 @@ const ChatWidget = ({ currentUser }) => {
     return () => unsubscribe();
   }, [currentUser]);
 
-  // 2. Aktif bir sohbet seçildiğinde mesajları dinle
   useEffect(() => {
     if (!activeChat) return;
 
@@ -65,8 +60,7 @@ const ChatWidget = ({ currentUser }) => {
     return () => unsubscribe();
   }, [activeChat]);
 
-  // Mesaj Gönderme
-  const handleSendMessage = async (e) => {
+const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !activeChat) return;
 
@@ -82,13 +76,11 @@ const ChatWidget = ({ currentUser }) => {
     }
   };
 
-  // Kural 2: Kullanıcı giriş yapmamışsa chati hiç gösterme
   if (!currentUser) return null;
 
   return (
     <div className="chat-widget-container">
-      {/* Sohbet Kutusu Açık mı? */}
-      {isOpen && (
+       {isOpen && (
         <div className="chat-window">
           <div className="chat-header">
             <span>{activeChat ? otherUserNames[activeChat.participants.find(uid => uid !== currentUser.uid)] || 'Sohbet' : 'Mesajlarım'}</span>
@@ -96,7 +88,6 @@ const ChatWidget = ({ currentUser }) => {
           </div>
 
           <div className="chat-body">
-            {/* Durum A: Sohbet listesi görünümü (Henüz birine tıklanmadıysa) */}
             {!activeChat && (
               <div className="chat-list">
                 {chats.length === 0 ? (
@@ -114,8 +105,6 @@ const ChatWidget = ({ currentUser }) => {
                 )}
               </div>
             )}
-
-            {/* Durum B: Mesajlaşma görünümü (Bir sohbet seçildiyse) */}
             {activeChat && (
               <>
                 <div className="messages-area">
@@ -140,8 +129,6 @@ const ChatWidget = ({ currentUser }) => {
           </div>
         </div>
       )}
-
-      {/* Yuvarlak Açma Butonu */}
       <button className="chat-toggle-btn" onClick={() => setIsOpen(!isOpen)}>
         {isOpen ? <IoMdClose size={24} /> : <IoMdChatbubbles size={24} />}
       </button>
