@@ -1,6 +1,6 @@
 import React from 'react';
 
-function CourseDetailInfoCard({ courseName, description, instructorName, instructorImage }) {
+function CourseDetailInfoCard({ courseName, description, instructorName, instructorImage, onEnroll }) {
   return (
     <div className="card shadow-sm border-0 rounded-4 p-4 infoCard">
       <div className="row g-4 align-items-center infoCardRow">
@@ -17,7 +17,7 @@ function CourseDetailInfoCard({ courseName, description, instructorName, instruc
           <div className="d-flex flex-column align-items-center text-center infoCardInstructorContent">
 
             <div className="d-grid gap-2 w-75">
-              <button className="btn btn-danger fw-semibold infoCardJoinButton">Katıl</button>
+              <button onClick={onEnroll} className="btn btn-danger fw-semibold infoCardJoinButton">Katıl</button>
               <button className="btn btn-outline-warning btn-sm infoCardContactButton">
                 Eğitmenle İletişime Geç
               </button>

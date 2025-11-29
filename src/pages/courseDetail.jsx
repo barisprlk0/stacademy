@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../config/firebase.js';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import Navbar from '../components/Navbar.jsx';
 import CourseDetailInfoCard from '../components/courseDetailInfoCard.jsx';
 
@@ -39,6 +39,58 @@ const CourseDetailPage = ({ currentUser }) => {
     fetchCourseData();
   }, [id]);
 
+  const onClickEnroll = async () => {
+    if (!currentUser) {
+      alert("Kursa katılmak için giriş yapmanız gerekiyor.");
+      return;
+    }
+
+    if (!course || !id) {
+      alert("Kurs bilgisi bulunamadı.");
+      return;
+    }
+
+    try {
+      const courseRef = doc(db, 'courses', id);
+      const courseDoc = await getDoc(courseRef);
+
+      if (!courseDoc.exists()) {
+        alert("Kurs bulunamadı.");
+        return;
+      }
+
+      const courseData = courseDoc.data();
+      const courseParticipants = courseData.courseParticipants || [];
+      const enrollSize = courseData.enrollSize || 0;
+
+      if (courseParticipants.includes(currentUser.uid)) {
+        alert("Bu kursa zaten kayıtlısınız.");
+        return;
+      }
+      if (courseParticipants.length >= enrollSize) {
+        alert("Bu kursun kontenjanı dolmuş.");
+        return;
+      }
+
+      // Check if user is trying to enroll in their own course
+      if (courseData.instructorUid === currentUser.uid) {
+        alert("Kendi kursunuza katılamazsınız.");
+        return;
+      }
+
+      const updatedParticipants = [...courseParticipants, currentUser.uid];
+      await updateDoc(courseRef, {
+        courseParticipants: updatedParticipants
+      });
+
+      alert("Kursa başarıyla katıldınız.");
+      window.location.reload();
+    } catch (error) {
+      console.error("Kursa katılma hatası:", error);
+      alert("Kursa katılırken bir hata oluştu: " + error.message);
+    }
+  };
+
   if (loading) {
     return <div className="d-flex justify-content-center align-items-center min-vh-100">Yükleniyor...</div>;
   }
@@ -71,6 +123,7 @@ const CourseDetailPage = ({ currentUser }) => {
             description={course.courseIntroduction}
             instructorName={instructor ? `${instructor.name} ${instructor.surname}` : "Eğitmen Bilgisi Yok"}
             instructorImage={instructor?.profileImage}
+            onEnroll={onClickEnroll}
           />
         </div>
 
@@ -86,7 +139,7 @@ const CourseDetailPage = ({ currentUser }) => {
               </div>
             </div>
           </div>
-          
+
           <div className="col-lg-4">
             <div className="card shadow-sm border-0 rounded-4 p-4 mb-4 text-center">
               <div className="d-flex justify-content-center mb-3">
