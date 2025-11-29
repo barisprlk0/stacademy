@@ -4,6 +4,7 @@ import RegisterPage from './pages/RegisterPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import AddCourse from './pages/AddCourse.jsx';
 import WelcomePage from './pages/WelcomePage.jsx';
+import UserProfile from './pages/UserProfile.jsx';
 
 import { useEffect } from 'react';
 import { onAuthStateChanged } from "firebase/auth";
@@ -41,7 +42,7 @@ function App() {
           <Route path="/addCourse" element={<AddCourse currentUser={currentUser} />} />
           <Route path="/courseDetail/:id" element={<CourseDetail currentUser={currentUser} />} />
           <Route path="/welcome" element={<WelcomePage />} />
-
+          <Route path="/profile" element={<UserProfile currentUser={currentUser} />} />
         </Routes>
       </Router>
 
