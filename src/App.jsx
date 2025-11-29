@@ -3,6 +3,8 @@ import MainPage from './pages/MainPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import AddCourse from './pages/AddCourse.jsx';
+import WelcomePage from './pages/WelcomePage.jsx';
+
 import { useEffect } from 'react';
 import { onAuthStateChanged } from "firebase/auth";
 import {auth} from '../src/config/firebase.js';
@@ -38,6 +40,7 @@ function App() {
         <Route path="/login" element={<LoginPage currentUser={currentUser}/>} />
         <Route path="/addCourse" element={<AddCourse currentUser={currentUser}/>} />
         <Route path="/courseDetail" element={<CourseDetail currentUser={currentUser}/>} />
+        <Route path="/welcome" element={<WelcomePage />} />
 
 </Routes>
     </Router>
