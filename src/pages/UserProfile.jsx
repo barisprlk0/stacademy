@@ -1,23 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar.jsx';
 import { db } from '../config/firebase.js';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import '../css/mainPage.css';
+import MainCardComponent from '../components/MainCardComponent.jsx';
 
 function UserProfile({ currentUser }) {
     const [userProfile, setUserProfile] = useState(null);
+    const [userCourses, setUserCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUserProfile = async () => {
+        const fetchUserProfileAndCourses = async () => {
             if (currentUser && currentUser.uid) {
                 try {
+                    // Fetch User Profile
                     const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
                     if (userDoc.exists()) {
                         setUserProfile(userDoc.data());
                     }
+
+                    // Fetch User Courses
+                    const coursesQuery = query(collection(db, 'courses'), where('instructorUid', '==', currentUser.uid));
+                    const querySnapshot = await getDocs(coursesQuery);
+                    const courses = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    setUserCourses(courses);
+
                 } catch (error) {
-                    console.error('Error fetching user profile:', error);
+                    console.error('Error fetching user data:', error);
                 } finally {
                     setLoading(false);
                 }
@@ -26,7 +36,7 @@ function UserProfile({ currentUser }) {
             }
         };
 
-        fetchUserProfile();
+        fetchUserProfileAndCourses();
     }, [currentUser]);
 
     if (loading) {
@@ -68,7 +78,7 @@ function UserProfile({ currentUser }) {
         <div className="mainPage" style={{ minHeight: '100vh', backgroundColor: '#ECEFF2' }}>
             <Navbar currentUser={currentUser} />
 
-            <div className="container mt-5">
+            <div className="container mt-5 pb-5">
                 <div className="card shadow-sm border-0 rounded-4 p-4" style={{ backgroundColor: '#fff' }}>
                     <div className="row g-4 align-items-center">
                         {/* Sol Taraf: Profil Resmi ve Temel Bilgiler */}
@@ -125,6 +135,25 @@ function UserProfile({ currentUser }) {
                         </div>
                     </div>
                 </div>
+
+                {/* Verdiği Dersler Bölümü */}
+                {userCourses.length > 0 && (
+                    <div className="mt-5">
+                        <h4 className="fw-bold mb-4 text-dark">Verdiği Dersler</h4>
+                        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                            {userCourses.map(course => (
+                                <div key={course.id} className="col">
+                                    <MainCardComponent
+                                        course={course}
+                                        instructorName={displayName}
+                                        instructorImage={profileImage}
+                                        currentUser={currentUser}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
