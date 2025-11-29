@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import '../css/navbar.css';
 import { useNavigate } from 'react-router-dom';
-import { db, auth } from '../config/firebase.js';
+import { db } from '../config/firebase.js';
 import { doc, getDoc } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
-<<<<<<< HEAD
 import { auth } from '../config/firebase.js';
-=======
->>>>>>> main
 
 
-function Navbar({ currentUser }) {
+function Navbar({currentUser}) {
+
+
 
     const navigate = useNavigate();
     const [userProfile, setUserProfile] = useState(null);
@@ -46,7 +45,6 @@ function Navbar({ currentUser }) {
     const goToLogin = () => {
         navigate('/login');
     };
-<<<<<<< HEAD
     const logout = () =>{
         try{
         signOut(auth);
@@ -55,92 +53,42 @@ function Navbar({ currentUser }) {
             console.error(err);
         }
     }
-=======
-    const goToProfile = () => {
-        navigate('/profile');
-    };
->>>>>>> main
 
-    const handleLogout = async () => {
-        try {
-            await signOut(auth);
-            navigate('/login');
-        } catch (error) {
-            console.error("Error signing out: ", error);
-        }
-    };
-
-    const displayName = userProfile
-        ? `${userProfile.name || ''} ${userProfile.surname || ''}`.trim()
+    const displayName = userProfile 
+        ? `${userProfile.name || ''} ${userProfile.surname || ''}`.trim() 
         : 'AD SOYAD BİLGİSİ';
-
+    
     const displayUni = userProfile?.uni || 'ÜNİ BİLGİSİ';
     const displayDep = userProfile?.dep || 'CSE';
     const profileImage = userProfile?.profilePictureUrl || 'https://picsum.photos/50/50';
 
     return (
-<<<<<<< HEAD
         <div className="navbar mt-0" >
             <div className="navbar-brand navbar-link fw-bold" onClick={goToHome}>Ana Sayfa</div>
             <div className="navbar-center">
                 <a href="#" className="navbar-link">Ders Ver</a>
                 <a href="#" onClick={logout} className="navbar-link">Çıkış Yap</a>
             </div>
-=======
-        <nav className="navbar navbar-expand-lg sticky-top custom-navbar">
-            <div className="container">
-                {/* Brand */}
-                <div className="navbar-brand fw-bold d-flex align-items-center" onClick={goToHome} style={{ cursor: 'pointer' }}>
-                    <span style={{ color: '#f9423a', fontSize: '1.5rem' }}>st</span>
-                    <span style={{ color: '#333', fontSize: '1.5rem' }}>Academy</span>
-                </div>
->>>>>>> main
 
-                {/* Center Links (Desktop) */}
-                <div className="d-none d-md-flex align-items-center gap-4 navbar-center-links">
-                    <a onClick={goToHome} className="nav-link-custom active">Ders Al</a>
-                    <a href="#" className="nav-link-custom">Ders Ver</a>
-                </div>
 
-                {/* Right Side: Auth or Profile */}
-                <div className="d-flex align-items-center">
-                    {currentUser ? (
-                        <div className="d-flex align-items-center gap-3">
-                            <div className="d-flex align-items-center gap-3 profile-section" onClick={goToProfile} style={{ cursor: 'pointer' }}>
-                                <div className="text-end d-none d-sm-block lh-1">
-                                    <div className="fw-bold text-dark" style={{ fontSize: '0.9rem' }}>{displayName}</div>
-                                    <div className="text-muted" style={{ fontSize: '0.75rem' }}>{displayUni}</div>
-                                </div>
-                                <img
-                                    src={profileImage}
-                                    alt="Profile"
-                                    className="rounded-circle border border-2 border-white shadow-sm"
-                                    style={{ width: '45px', height: '45px', objectFit: 'cover' }}
-                                />
-                            </div>
-                            <button
-                                onClick={handleLogout}
-                                className="btn btn-link text-danger p-0 ms-2"
-                                style={{ textDecoration: 'none', fontSize: '1.5rem' }}
-                                title="Çıkış Yap"
-                            >
-                                <i className="bi bi-box-arrow-right"></i>
 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                                    <path fillRule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
-                                    <path fillRule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
-                                </svg>
-                            </button>
+            <div className="navbar-right">
+        {currentUser ? (
+                    <div className="navbar-profile">
+                        <img src={profileImage} alt="Profile" className="navbar-profile-img" />
+                        <div className="navbar-profile-info">
+                            <span className="navbar-profile-name">{displayName}</span>
+                            <span className="navbar-profile-role">{displayUni} <br />{displayDep}</span>
                         </div>
-                    ) : (
-                        <div className="d-flex gap-2">
-                            <button onClick={goToLogin} className="btn btn-outline-danger rounded-pill px-4 btn-sm fw-semibold">Giriş Yap</button>
-                            <button onClick={goToRegister} className="btn btn-danger rounded-pill px-4 btn-sm fw-semibold">Kayıt Ol</button>
-                        </div>
-                    )}
-                </div>
+                    </div>
+              ) : (
+                    <div className="navbar-auth-links">
+                        <a onClick={goToRegister} className="navbar-link">Kayıt Ol</a>
+                        <a onClick={goToLogin} className="navbar-link">Giriş Yap</a>
+                    </div>
+                )}
             </div>
-        </nav>
+        </div>
     );
 }
 
