@@ -17,8 +17,8 @@ function CourseDetailInfoCard({ courseName, description, instructorName, instruc
           <div className="d-flex flex-column align-items-center text-center infoCardInstructorContent">
 
             <div className="d-grid gap-2 w-75">
-              <button className="btn btn-primary fw-semibold infoCardJoinButton">Katıl</button>
-              <button className="btn btn-outline-secondary btn-sm infoCardContactButton">
+              <button className="btn btn-danger fw-semibold infoCardJoinButton">Katıl</button>
+              <button className="btn btn-outline-warning btn-sm infoCardContactButton">
                 Eğitmenle İletişime Geç
               </button>
             </div>

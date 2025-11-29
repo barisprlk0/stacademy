@@ -8,7 +8,7 @@
 }
 
 .card .customButton {
-    background-color: #526CC9;
+    background-color: #ec584b;
     border: none;
     color: white;
     text-align: center;
@@ -18,7 +18,7 @@
 }
 
 .card .customButton:hover {
-    background-color: #526CC9;
+    background-color: #d45c51;
     color: white;
     opacity: 0.90;
     transition: 0.3s;
@@ -139,7 +139,7 @@
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
-    color: #333;
+    color: #000f;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: 0.3s;
@@ -153,7 +153,7 @@
 }
 
 .filter-btn.active {
-    background-color: #526CC9;
+    background-color: #f9423a;
     color: white;
 }
 

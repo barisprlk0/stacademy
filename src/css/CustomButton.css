@@ -1,5 +1,5 @@
 .buttonContainer .customButton {
-    background-color: #526CC9;
+    background-color: #ec584b;
     border: none;
     color: white;
     text-align: center;
@@ -9,7 +9,7 @@
 }
 
 .buttonContainer .customButton:hover {
-    background-color: #526CC9;
+    background-color: #d45c51;
     color: white;
     opacity: 0.90;
     transition: 0.3s;
