@@ -81,7 +81,6 @@ function UserProfile({ currentUser }) {
             <div className="container mt-5 pb-5">
                 <div className="card shadow-sm border-0 rounded-4 p-4" style={{ backgroundColor: '#fff' }}>
                     <div className="row g-4 align-items-center">
-                        {/* Sol Taraf: Profil Resmi ve Temel Bilgiler */}
                         <div className="col-md-4 text-center border-end">
                             <img
                                 src={profileImage}
@@ -94,7 +93,6 @@ function UserProfile({ currentUser }) {
                             <span className="badge bg-danger rounded-pill px-3 py-2">Öğrenci</span>
                         </div>
 
-                        {/* Sağ Taraf: Detaylı Bilgiler */}
                         <div className="col-md-8">
                             <h4 className="fw-bold mb-4 text-dark border-bottom pb-2">Profil Detayları</h4>
 
@@ -140,17 +138,63 @@ function UserProfile({ currentUser }) {
                 {userCourses.length > 0 && (
                     <div className="mt-5">
                         <h4 className="fw-bold mb-4 text-dark">Verdiği Dersler</h4>
-                        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                            {userCourses.map(course => (
-                                <div key={course.id} className="col">
-                                    <MainCardComponent
-                                        course={course}
-                                        instructorName={displayName}
-                                        instructorImage={profileImage}
-                                        currentUser={currentUser}
-                                    />
-                                </div>
-                            ))}
+                        <div id="courseCarousel" className="carousel slide" data-bs-ride="carousel">
+                            <div className="carousel-inner">
+                                {userCourses.length <= 3 ? (
+                                    <div className="carousel-item active">
+                                        <div className="row g-4">
+                                            {userCourses.map(course => (
+                                                <div key={course.id} className="col-md-4">
+                                                    <MainCardComponent
+                                                        course={course}
+                                                        instructorName={displayName}
+                                                        instructorImage={profileImage}
+                                                        currentUser={currentUser}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    userCourses.map((_, index) => {
+                                        // Create a window of 3 courses starting from current index
+                                        const currentWindow = [
+                                            userCourses[index],
+                                            userCourses[(index + 1) % userCourses.length],
+                                            userCourses[(index + 2) % userCourses.length]
+                                        ];
+
+                                        return (
+                                            <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
+                                                <div className="row g-4">
+                                                    {currentWindow.map((course, i) => (
+                                                        <div key={`${index}-${i}`} className="col-md-4">
+                                                            <MainCardComponent
+                                                                course={course}
+                                                                instructorName={displayName}
+                                                                instructorImage={profileImage}
+                                                                currentUser={currentUser}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        );
+                                    })
+                                )}
+                            </div>
+                            {userCourses.length > 3 && (
+                                <>
+                                    <button className="carousel-control-prev" type="button" data-bs-target="#courseCarousel" data-bs-slide="prev" style={{ width: '5%' }}>
+                                        <span className="carousel-control-prev-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                                        <span className="visually-hidden">Önceki</span>
+                                    </button>
+                                    <button className="carousel-control-next" type="button" data-bs-target="#courseCarousel" data-bs-slide="next" style={{ width: '5%' }}>
+                                        <span className="carousel-control-next-icon bg-dark rounded-circle p-3" aria-hidden="true"></span>
+                                        <span className="visually-hidden">Sonraki</span>
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                 )}
