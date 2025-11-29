@@ -2,6 +2,7 @@ import { useState } from 'react'
 import MainPage from './pages/MainPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
+import AddCourse from './pages/AddCourse.jsx';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 
 import './App.css'
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<MainPage/>} />
         <Route path="/register" element={<RegisterPage/>} />
         <Route path="/login" element={<LoginPage/>} />
+        <Route path="/addCourse" element={<AddCourse/>} />
 
 </Routes>
     </Router>
