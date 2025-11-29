@@ -3,7 +3,8 @@ import Navbar from '../components/Navbar.jsx';
 import '../css/authPage.css';
 import {useNavigate} from 'react-router-dom';
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from 'firebase/auth';
-import { auth, db } from '../config/firebase.js';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { auth, db,storage } from '../config/firebase.js';
 import { doc, setDoc } from 'firebase/firestore';
 import CustomButton from '../components/CustomButton.jsx';
 const universities = [
@@ -367,41 +368,76 @@ function RegisterPage() {
     const [password,setPassword] = useState("");
     const [uni,setUni] = useState("");
     const [dep,setDep] = useState("");
-
+    const [profileImage, setProfileImage] = useState(null);
     const navigate = useNavigate();
     const goToLogin = () => {
         navigate('/login');
     };
+const uploadImage = async (file, userId) => {
+        if (!file) return null;
 
+        try {
+            // Depolama yolunu oluştur: `profile_images/{userId}/profile.jpg`
+            const storageRef = ref(storage, `profile_images/${userId}/profile`);
+            
+            // Dosyayı yükle
+            const snapshot = await uploadBytes(storageRef, file);
+            
+            // Yüklenen dosyanın indirme URL'sini al
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            
+            return downloadURL;
+        } catch (error) {
+            console.error("Fotoğraf yüklenirken hata oluştu:", error);
+            alert("Profil fotoğrafı yüklenirken bir hata oluştu.");
+            return null;
+        }
+    };
 
-    const handleRegister = async() => {
-    if(name=="" || surname=="" || email=="" || password=="" || uni=="" || dep==""){
-      alert("Lütfen tüm alanları doldurunuz.");
-      return;
-    }
+const handleRegister = async() => {
+        // Kontrollerde `profileImage` zorunlu olmadığı için sadece diğer alanları kontrol ediyoruz.
+        if(name=="" || surname=="" || email=="" || password=="" || uni=="" || dep==""){
+            alert("Lütfen tüm zorunlu alanları doldurunuz.");
+            return;
+        }
+        
+        try{
+            // 1. Firebase Auth ile Kullanıcı Oluşturma
+            const userCredential= await createUserWithEmailAndPassword(auth, email, password);
+            const userId = userCredential.user.uid;
+            
+            let photoURL = null;
 
-    try{
-      const userCredential= await createUserWithEmailAndPassword(auth, email, password);
-      const userDocref=(doc(db,"users",userCredential.user.uid));
-      await setDoc(userDocref,{
-        name:name,
-        surname:surname,
-        email:email,
-        uni: uni,
-        dep: dep,
-      })
+            // 2. Profil Fotoğrafını Yükleme (Opsiyonel)
+            if(profileImage){
+                photoURL = await uploadImage(profileImage, userId);
+                // Fotoğraf yüklemesi başarısız olursa, kayıt işlemine devam edip fotoğraf alanını boş bırakabiliriz
+                // ya da kayıt işlemini tamamen durdurabiliriz. Burada devam etmeyi tercih ettik.
+            }
 
-      alert("Kayıt Başarılı");
-      navigate("/login");
+            // 3. Firestore'a Kullanıcı Verilerini Kaydetme
+            const userDocref=(doc(db,"users", userId));
+            await setDoc(userDocref,{
+                name: name,
+                surname: surname,
+                email: email,
+                uni: uni,
+                dep: dep,
+                // Yüklenen fotoğrafın URL'sini Firestore'a kaydet
+                profilePictureUrl: photoURL, 
+            })
 
-    }catch(error){
-      if(error instanceof Error){
-        alert(error.message);
-      } else{
-        alert("Kayıt sırasında bir hata oluştu.");
-      }
-    }
-  };
+            alert("Kayıt Başarılı");
+            navigate("/login");
+
+        }catch(error){
+            if(error instanceof Error){
+                alert(error.message);
+            } else{
+                alert("Kayıt sırasında bir hata oluştu.");
+            }
+        }
+    };
 
     
     return (
@@ -437,7 +473,17 @@ function RegisterPage() {
                     <input type="password" placeholder="•••••••••••" id="password" value={password} onChange={(e)=>setPassword(e.target.value)} className="authInput form-control w-100 mb-3" />
                     </div>
 
-
+<div className="d-flex flex-column align-items-start mb-3">
+                        <h5 className="m-0 mx-2">Profil Fotoğrafı (Opsiyonel) </h5> 
+                        <input 
+                            type="file" 
+                            id="profileImage" 
+                            accept="image/*" // Sadece görsel dosyaları kabul et
+                            onChange={(e) => setProfileImage(e.target.files[0])} // Seçilen dosyayı state'e kaydet
+                            className="authInput form-control w-100" 
+                        />
+                        {/* Seçilen fotoğrafı önizlemek isterseniz buraya bir <img> ekleyebilirsiniz */}
+                    </div>
 
 
                     <select value={uni} id='uni' onChange={(e)=>setUni(e.target.value)} className="authInput form-control w-100 mb-3">

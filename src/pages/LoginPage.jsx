@@ -55,8 +55,6 @@ function LoginPage() {
 
 
 
-
-
                 </div>
 
             </div>
