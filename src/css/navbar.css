@@ -29,7 +29,7 @@
 }
 
 .navbar-link:hover {
-
+    color: #dd8e8a;
     transition: 0.3s;
 }
 
