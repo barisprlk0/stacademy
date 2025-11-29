@@ -2,10 +2,10 @@ import React from 'react';
 import Navbar from '../components/Navbar.jsx'; 
 import CourseDetailInfoCard from '../components/courseDetailInfoCard.jsx'; 
 
-const CourseDetailPage = () => {
+const CourseDetailPage = ({ currentUser }) => {
   return (
     <div className="bg-light min-vh-100 pb-5">
-      <Navbar />
+      <Navbar currentUser={currentUser} />
 
       <div 
         style={{ 

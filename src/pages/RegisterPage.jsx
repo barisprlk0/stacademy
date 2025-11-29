@@ -361,7 +361,7 @@ const departments = [
 ];
 
 
-function RegisterPage() {
+function RegisterPage({ currentUser }) {
     const [name,setName] = useState("");
     const [surname,setSurname] = useState("");
     const [email,setEmail] = useState("");
@@ -432,7 +432,7 @@ const handleRegister = async() => {
     
     return (
         <div className="registerPage">
-            <Navbar  />
+            <Navbar currentUser={currentUser} />
                 <div className="row mt-5">
         <div className="col-4 ">
             <div className="authContainer ">
