@@ -422,7 +422,7 @@ const handleRegister = async() => {
 
         }catch(error){
             if(error instanceof Error){
-                alert(error.message);
+                alert("Kayıt sırasında bir hata oluştu.");
             } else{
                 alert("Kayıt sırasında bir hata oluştu.");
             }

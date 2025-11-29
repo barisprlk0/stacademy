@@ -2,7 +2,7 @@ import { useState } from 'react'
 import MainPage from './pages/MainPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
-import AddCourse from './pages/AddCourse.jsx';
+import AddCourse from './pages/addCourse.jsx';
 import WelcomePage from './pages/WelcomePage.jsx';
 import UserProfile from './pages/UserProfile.jsx';
 
