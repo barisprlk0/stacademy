@@ -14,13 +14,7 @@ function MainCardComponent() {
           <img src="https://picsum.photos/50/50" className="profileImage" alt="profile"></img>
           <div className="profileInfo ms-2">
             <span className="profileName d-block">Barış P.</span>
-            <div className="stars">
-              <span className="star">★</span>
-              <span className="star">★</span>
-              <span className="star">★</span>
-              <span className="star">★</span>
-              <span className="star">★</span>
-            </div>
+
           </div>
         </div>
         <button className="btn customButton py-1"><span className="customButtonText fw-bold">Katıl</span></button>
