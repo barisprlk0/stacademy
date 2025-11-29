@@ -9,7 +9,7 @@ const CourseDetailPage = ({ currentUser }) => {
   const { id } = useParams();
   const [course, setCourse] = useState(null);
   const [instructor, setInstructor] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -124,6 +124,8 @@ const CourseDetailPage = ({ currentUser }) => {
             instructorName={instructor ? `${instructor.name} ${instructor.surname}` : "Eğitmen Bilgisi Yok"}
             instructorImage={instructor?.profileImage}
             onEnroll={onClickEnroll}
+            instructorUid={course.instructorUid} // Kurs verisinden gelen eğitmen ID'si
+            currentUser={currentUser}
           />
         </div>
 
