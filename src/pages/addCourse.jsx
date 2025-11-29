@@ -16,6 +16,7 @@ import { auth } from '../config/firebase.js';
 
 
 function AddCourse() {
+    const navigate = useNavigate();
     const [courseName, setCourseName] = useState('');
     const [courseCategory, setCourseCategory] = useState('');
     const [courseDescription, setCourseDescription] = useState('');
@@ -51,7 +52,7 @@ function AddCourse() {
                 alert("Oturum açmanız gerekiyor!");
                 return;
             }
-        const navigate = useNavigate();
+        
         if(courseName=="" || courseCategory=="" || courseDescription=="" || courseIntroduction=="" || courseImage=="" || courseLevel=="" || enrollSize==""){
             alert("Lütfen tüm alanları doldurunuz.");
             return;
