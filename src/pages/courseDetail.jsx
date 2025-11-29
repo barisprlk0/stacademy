@@ -147,7 +147,7 @@ const CourseDetailPage = ({ currentUser }) => {
             <div className="card shadow-sm border-0 rounded-4 p-4 mb-4 text-center">
               <div className="d-flex justify-content-center mb-3">
                 <img
-                  src={instructor?.profileImage || "https://picsum.photos/200/200"}
+                  src={instructor?.profilePictureUrl|| "https://picsum.photos/200/200"}
                   alt="Instructor"
                   className="rounded-circle"
                   style={{ width: '100px', height: '100px', objectFit: 'cover' }}
