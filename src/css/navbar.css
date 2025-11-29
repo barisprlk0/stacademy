@@ -1,78 +1,38 @@
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    font-family: 'Inter', sans-serif;
-    padding: 0 20px; 
+.custom-navbar {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
+    padding: 15px 0;
+    transition: all 0.3s ease;
 }
 
-.navbar-brand {
-    font-size: 24px;
-    font-weight: bold;
-    color: red;
-}
-
-.navbar-center {
-    display: flex;
-    gap: 40px;
-}
-
-.navbar-link {
-    text-decoration: none;
-    color: #f9423a;
-    font-size: 18px;
+.nav-link-custom {
+    color: #555;
     font-weight: 500;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
     cursor: pointer;
-    transition: 0.3s;
 }
 
-.navbar-link:hover {
-    color: #dd8e8a;
-    transition: 0.3s;
+.nav-link-custom:hover {
+    color: #f9423a;
+    background-color: rgba(249, 66, 58, 0.05);
 }
 
-.navbar-right {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.navbar-auth-links {
-    display: flex;
-    gap: 20px;
-}
-
-.navbar-profile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.navbar-profile-img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.navbar-profile-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.navbar-profile-name {
-    font-size: 16px;
+.nav-link-custom.active {
+    color: #f9423a;
     font-weight: 600;
-    color: #000;
-    line-height: 1.2;
 }
 
-.navbar-profile-role {
-    font-size: 12px;
-    color: #888;
-    line-height: 1.2;
-    text-align: left;
+.profile-section {
+    padding: 5px 10px;
+    border-radius: 30px;
+    transition: all 0.2s ease;
+}
+
+.profile-section:hover {
+    background-color: rgba(0, 0, 0, 0.03);
 }

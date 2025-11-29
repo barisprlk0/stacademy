@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar.jsx';
 import { db } from '../config/firebase.js';
 import { doc, getDoc } from 'firebase/firestore';
-import '../css/mainPage.css'; // Reusing mainPage styles for consistency
+import '../css/mainPage.css';
 
 function UserProfile({ currentUser }) {
     const [userProfile, setUserProfile] = useState(null);
@@ -34,7 +34,9 @@ function UserProfile({ currentUser }) {
             <div className="mainPage">
                 <Navbar currentUser={currentUser} />
                 <div className="container mt-5 text-center">
-                    <p>Yükleniyor...</p>
+                    <div className="spinner-border text-danger" role="status">
+                        <span className="visually-hidden">Yükleniyor...</span>
+                    </div>
                 </div>
             </div>
         );
@@ -45,7 +47,9 @@ function UserProfile({ currentUser }) {
             <div className="mainPage">
                 <Navbar currentUser={currentUser} />
                 <div className="container mt-5 text-center">
-                    <p>Lütfen profilinizi görüntülemek için giriş yapın.</p>
+                    <div className="alert alert-warning" role="alert">
+                        Lütfen profilinizi görüntülemek için giriş yapın.
+                    </div>
                 </div>
             </div>
         );
@@ -65,41 +69,56 @@ function UserProfile({ currentUser }) {
             <Navbar currentUser={currentUser} />
 
             <div className="container mt-5">
-                <div className="row justify-content-center">
-                    <div className="col-md-8 col-lg-6">
-                        <div className="card customCard p-5" style={{ backgroundColor: '#fff', borderRadius: '25px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
-                            <div className="text-center mb-4">
-                                <img
-                                    src={profileImage}
-                                    alt="Profile"
-                                    className="rounded-circle mb-3"
-                                    style={{ width: '120px', height: '120px', objectFit: 'cover', border: '4px solid #f9423a' }}
-                                />
-                                <h2 className="fw-bold mb-1" style={{ color: '#333' }}>{displayName}</h2>
-                                <p className="text-muted mb-0">{email}</p>
-                            </div>
+                <div className="card shadow-sm border-0 rounded-4 p-4" style={{ backgroundColor: '#fff' }}>
+                    <div className="row g-4 align-items-center">
+                        {/* Sol Taraf: Profil Resmi ve Temel Bilgiler */}
+                        <div className="col-md-4 text-center border-end">
+                            <img
+                                src={profileImage}
+                                alt="Profile"
+                                className="rounded-circle mb-3 shadow-sm"
+                                style={{ width: '150px', height: '150px', objectFit: 'cover' }}
+                            />
+                            <h3 className="fw-bold mb-1 text-dark">{displayName}</h3>
+                            <p className="text-muted mb-3">{email}</p>
+                            <span className="badge bg-danger rounded-pill px-3 py-2">Öğrenci</span>
+                        </div>
 
-                            <div className="d-flex justify-content-center mb-4">
-                                <div className="badge bg-light text-dark p-2 px-3 rounded-pill border" style={{ fontSize: '0.9rem' }}>
-                                    🎓 {displayUni}
+                        {/* Sağ Taraf: Detaylı Bilgiler */}
+                        <div className="col-md-8">
+                            <h4 className="fw-bold mb-4 text-dark border-bottom pb-2">Profil Detayları</h4>
+
+                            <div className="row g-3">
+                                <div className="col-md-6">
+                                    <div className="p-3 rounded-3" style={{ backgroundColor: '#f8f9fa' }}>
+                                        <small className="text-muted d-block mb-1">Üniversite</small>
+                                        <span className="fw-semibold text-dark">{displayUni}</span>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="p-3 rounded-3" style={{ backgroundColor: '#f8f9fa' }}>
+                                        <small className="text-muted d-block mb-1">Bölüm</small>
+                                        <span className="fw-semibold text-dark">{displayDep}</span>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="p-3 rounded-3" style={{ backgroundColor: '#f8f9fa' }}>
+                                        <small className="text-muted d-block mb-1">Üyelik Tarihi</small>
+                                        <span className="fw-semibold text-dark">
+                                            {currentUser.metadata.creationTime ? new Date(currentUser.metadata.creationTime).toLocaleDateString('tr-TR') : '-'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    <div className="p-3 rounded-3" style={{ backgroundColor: '#f8f9fa' }}>
+                                        <small className="text-muted d-block mb-1"></small>
+                                        <span className="fw-semibold text-success">Aktif</span>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="row text-center">
-                                <div className="col-6 border-end">
-                                    <h6 className="text-muted text-uppercase small fw-bold mb-2">Bölüm</h6>
-                                    <p className="fw-bold mb-0" style={{ color: '#f9423a' }}>{displayDep}</p>
-                                </div>
-                                <div className="col-6">
-                                    <h6 className="text-muted text-uppercase small fw-bold mb-2">Üyelik Tarihi</h6>
-                                    <p className="fw-bold mb-0" style={{ color: '#f9423a' }}>
-                                        {currentUser.metadata.creationTime ? new Date(currentUser.metadata.creationTime).toLocaleDateString('tr-TR') : '-'}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="mt-5 text-center">
-                                <button className="btn btn-outline-danger rounded-pill px-4 py-2 fw-bold">
+                            <div className="mt-4 text-end">
+                                <button className="btn btn-danger fw-semibold px-4 py-2 rounded-3">
                                     Profili Düzenle
                                 </button>
                             </div>
