@@ -5,13 +5,13 @@ import {getFirestore} from "firebase/firestore";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDk5Jbw3vJhRTYtrAs_ezGRuDjQn-4y8Bc",
-  authDomain: "fir-course-f573c.firebaseapp.com",
-  projectId: "fir-course-f573c",
-  storageBucket: "fir-course-f573c.firebasestorage.app",
-  messagingSenderId: "814454961142",
-  appId: "1:814454961142:web:2dfe8a3580722ca9c10dd7",
-  measurementId: "G-HQPNN73W07"
+  apiKey: "AIzaSyDW8JBCj0nFvp6v-4haJGWa8s1qQaenNHA",
+  authDomain: "stacademy.firebaseapp.com",
+  projectId: "stacademy",
+  storageBucket: "stacademy.firebasestorage.app",
+  messagingSenderId: "108601632538",
+  appId: "1:108601632538:web:1c3e8838adeb22799b2ea3",
+  measurementId: "G-2EQG237776"
 };
 
 const app = initializeApp(firebaseConfig);
