@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/mainPage.css';
-import '../css/liveChat.css';
 import MainCardComponent from '../components/MainCardComponent.jsx';
 import Navbar from '../components/Navbar.jsx';
 import { IoMdSearch, IoMdCodeWorking } from "react-icons/io";
-import { IoMdChatbubbles, IoMdSend, IoMdClose } from "react-icons/io";
 import { LuPenTool } from "react-icons/lu";
 import { BiMath } from "react-icons/bi";
 import { FaPaintBrush, FaGuitar } from "react-icons/fa";
 import { db } from '../config/firebase.js';
-import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, limit } from 'firebase/firestore';
-import LiveChat from '../components/LiveChat.jsx';
+import { collection, getDocs, query, orderBy, limit, doc, getDoc } from 'firebase/firestore';
+import ChatWidget from '../components/ChatWidget.jsx';
 
 function MainPage({ currentUser }) {
   const [courses, setCourses] = useState([]);
@@ -163,7 +161,7 @@ function MainPage({ currentUser }) {
           </div>
         </div>
       </div>
-      <LiveChat currentUser={currentUser} />
+      <ChatWidget currentUser={currentUser} />
     </div>
   );
 }
