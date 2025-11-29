@@ -9,7 +9,7 @@ import image from "../assets/collabration.jpg";
 function WelcomePage() {
   return (
       <div>
-
+        <Navbar />
       <div className="container my-4">
        
         <img 
