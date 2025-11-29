@@ -66,7 +66,7 @@ function AddCourse() {
                                         <span style={{ fontSize: "24px", marginRight: "10px" }}>&#8679;</span> 
                                         <span>Görsel Yükle</span>
                                     </div>
-                                    <button className="btn btn-outline-secondary btn-sm bg-white text-dark">Dosya Seç</button>
+                                    <input id="courseImage" accept='image/' className='form-control' type="file" />
                                 </div>
                             </div>
 
