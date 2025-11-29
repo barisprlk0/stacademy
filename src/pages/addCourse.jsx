@@ -45,46 +45,53 @@ function AddCourse() {
         }
     };
 
-    const handleAddCourse = async() => {
+const handleAddCourse = async () => {
         const currentUser = auth.currentUser;
-    
-            if (!currentUser) {
-                alert("Oturum açmanız gerekiyor!");
-                return;
-            }
-        
-        if(courseName=="" || courseCategory=="" || courseDescription=="" || courseIntroduction=="" || courseImage=="" || courseLevel=="" || enrollSize==""){
+
+        if (!currentUser) {
+            alert("Oturum açmanız gerekiyor!");
+            return;
+        }
+
+        // Form doğrulama (Sayı kontrolü için enrollSize'ı string olarak da kontrol ettik)
+        if (courseName === "" || courseCategory === "" || courseDescription === "" || courseIntroduction === "" || !courseImage || courseLevel === "" || enrollSize === "") {
             alert("Lütfen tüm alanları doldurunuz.");
             return;
         }
-        try{
-            
-            let courseImageUrl = null;
-    
-            if(courseImage){
-                courseImageUrl = await uploadImage(courseImage, currentUser.uid);
+
+        try {
+            // 1. Önce resmi yükleyip URL'sini alalım
+            let uploadedImageUrl = ""; 
+            if (courseImage) {
+                uploadedImageUrl = await uploadImage(courseImage, currentUser.uid);
             }
-            
-    
+
+            // 2. Veritabanı referansı (Burası tek segment olmalı: "courses")
             const courseRef = collection(db, "courses");
+            
+            // 3. Veriyi kaydetme
             await addDoc(courseRef, {
                 courseName: courseName,
                 courseCategory: courseCategory,
                 courseDescription: courseDescription,
                 courseIntroduction: courseIntroduction,
-                courseImage: courseImage,
                 courseLevel: courseLevel,
+                enrollSize: Number(enrollSize), // Sayıya çevirerek kaydediyoruz
                 courseParticipants: [],
-                courseImage: courseImage,
-    
+                
+                // DÜZELTİLEN KISIM: Dosyayı değil, Storage'dan gelen URL'i kaydediyoruz
+                courseImage: uploadedImageUrl, 
+
                 instructorUid: currentUser.uid,
+                createdAt: new Date() // Oluşturulma tarihini eklemek iyi bir pratiktir
             });
+
             alert("Kurs başarıyla eklendi.");
             navigate("/");
-        
+
         } catch (error) {
             console.error("Kurs ekleme hatası:", error);
-            alert("Kurs ekleme hatası oluştu.");
+            alert("Kurs ekleme hatası oluştu: " + error.message);
         }
     }
 
