@@ -1,8 +1,65 @@
 import '../css/mainPage.css';
+import { db } from '../config/firebase.js';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 
 
 
-function MainCardComponent({ course, instructorName, instructorImage }) {
+function MainCardComponent({ course, instructorName, instructorImage, currentUser }) {
+
+  const onClickEnroll = async () => {
+    if (!currentUser) {
+      alert("Kursa katılmak için giriş yapmanız gerekiyor.");
+      return;
+    }
+
+    if (!course || !course.id) {
+      alert("Kurs bilgisi bulunamadı.");
+      return;
+    }
+
+    try {
+
+      const courseRef = doc(db, 'courses', course.id);
+      const courseDoc = await getDoc(courseRef);
+
+      if (!courseDoc.exists()) {
+        alert("Kurs bulunamadı.");
+        return;
+      }
+
+      const courseData = courseDoc.data();
+      const courseParticipants = courseData.courseParticipants || [];
+      const enrollSize = courseData.enrollSize || 0;
+
+      if (courseParticipants.includes(currentUser.uid)) {
+        alert("Bu kursa zaten kayıtlısınız.");
+        return;
+      }
+      if (courseParticipants.length >= enrollSize) {
+        alert("Bu kursun kontenjanı dolmuş.");
+        return;
+      }
+
+      // Check if user is trying to enroll in their own cours
+      if (courseData.instructorUid === currentUser.uid) {
+        alert("Kendi kursunuza katılamazsınız.");
+        return;
+      }
+      const updatedParticipants = [...courseParticipants, currentUser.uid];
+      await updateDoc(courseRef, {
+        courseParticipants: updatedParticipants
+      });
+
+      alert("Kursa başarıyla katıldınız.");
+      window.location.reload();
+    } catch (error) {
+      console.error("Kursa katılma hatası:", error);
+      alert("Kursa katılırken bir hata oluştu: " + error.message);
+    }
+  }
+
+
+
   const formatName = (name) => {
     if (!name) return 'İsimsiz';
     const parts = name.trim().split(' ');
@@ -35,7 +92,7 @@ function MainCardComponent({ course, instructorName, instructorImage }) {
 
           </div>
         </div>
-        <button className="btn customButton py-1"><span className="customButtonText fw-bold">Katıl</span></button>
+        <button onClick={onClickEnroll} className="btn customButton py-1"><span className="customButtonText fw-bold">Katıl</span></button>
       </div>
 
     </div>

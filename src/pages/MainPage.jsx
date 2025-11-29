@@ -15,6 +15,7 @@ function MainPage({ currentUser }) {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -142,6 +143,7 @@ function MainPage({ currentUser }) {
                     course={course}
                     instructorName={course.instructorName}
                     instructorImage={course.instructorImage}
+                    currentUser={currentUser}
                   />
                 </div>
               ))
