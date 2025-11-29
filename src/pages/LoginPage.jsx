@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebase.js';
 import { useState } from 'react';
-function LoginPage() {
+function LoginPage({ currentUser }) {
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
     const navigate = useNavigate();
@@ -33,7 +33,7 @@ function LoginPage() {
 
     return (
         <div className="loginPage">
-            <Navbar  />
+            <Navbar currentUser={currentUser} />
                 <div className="row mt-5">
         <div className="col-4 ">
             <div className="authContainer ">

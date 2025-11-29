@@ -15,7 +15,7 @@ import { auth } from '../config/firebase.js';
 
 
 
-function AddCourse() {
+function AddCourse({ currentUser }) {
     const navigate = useNavigate();
     const [courseName, setCourseName] = useState('');
     const [courseCategory, setCourseCategory] = useState('');
@@ -101,7 +101,7 @@ const handleAddCourse = async () => {
 
     return (
         <div>
-            <Navbar />
+            <Navbar currentUser={currentUser} />
             
             <div className="container mt-4">
                 <div className="row mb-3">
