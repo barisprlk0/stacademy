@@ -4,6 +4,7 @@ import { db } from '../config/firebase.js';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import Navbar from '../components/Navbar.jsx';
 import CourseDetailInfoCard from '../components/courseDetailInfoCard.jsx';
+import ChatWidget from '../components/ChatWidget.jsx';
 
 const CourseDetailPage = ({ currentUser }) => {
   const { id } = useParams();
@@ -124,7 +125,7 @@ const CourseDetailPage = ({ currentUser }) => {
             instructorName={instructor ? `${instructor.name} ${instructor.surname}` : "Eğitmen Bilgisi Yok"}
             instructorImage={instructor?.profileImage}
             onEnroll={onClickEnroll}
-            instructorUid={course.instructorUid} // Kurs verisinden gelen eğitmen ID'si
+            instructorUid={course.instructorUid}
             currentUser={currentUser}
           />
         </div>
@@ -161,6 +162,8 @@ const CourseDetailPage = ({ currentUser }) => {
 
         </div>
       </div>
+            <ChatWidget currentUser={currentUser} />
+
     </div>
   );
 };
