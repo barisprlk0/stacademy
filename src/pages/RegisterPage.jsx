@@ -418,7 +418,7 @@ const handleRegister = async() => {
             })
 
             alert("Kayıt Başarılı");
-            navigate("/login");
+            navigate("/");
 
         }catch(error){
             if(error instanceof Error){
