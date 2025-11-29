@@ -66,19 +66,16 @@ function Navbar({ currentUser }) {
     return (
         <nav className="navbar navbar-expand-lg sticky-top custom-navbar">
             <div className="container">
-                {/* Brand */}
                 <div className="navbar-brand fw-bold d-flex align-items-center" onClick={goToHome} style={{ cursor: 'pointer' }}>
                     <span style={{ color: '#f9423a', fontSize: '1.5rem' }}>st</span>
                     <span style={{ color: '#333', fontSize: '1.5rem' }}>Academy</span>
                 </div>
 
-                {/* Center Links (Desktop) */}
                 <div className="d-none d-md-flex align-items-center gap-4 navbar-center-links">
                     <a onClick={goToHome} className="nav-link-custom active">Ders Al</a>
                     <a href="#" className="nav-link-custom">Ders Ver</a>
                 </div>
 
-                {/* Right Side: Auth or Profile */}
                 <div className="d-flex align-items-center">
                     {currentUser ? (
                         <div className="d-flex align-items-center gap-3">

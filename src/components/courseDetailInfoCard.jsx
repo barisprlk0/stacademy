@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { db } from '../config/firebase'; 
+import { db } from '../config/firebase';
 import { collection, query, where, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
 
 function CourseDetailInfoCard({ courseName, description, instructorName, instructorImage, onEnroll, instructorUid, currentUser }) {
-  
+
   const [loading, setLoading] = useState(false);
 
   const handleContactInstructor = async () => {
@@ -40,13 +40,13 @@ function CourseDetailInfoCard({ courseName, description, instructorName, instruc
         alert("Bu kişiyle daha önce sohbet oluşturulmuş, sohbeti açabilirsiniz!");
       } else {
         await addDoc(chatsRef, {
-          participants: [currentUser.uid, instructorUid], 
+          participants: [currentUser.uid, instructorUid],
           createdAt: serverTimestamp(),
           startedBy: currentUser.uid
         });
         alert("Sohbet başlatıldı! Ana sayfadan sohbete erişebilirsin.");
       }
-      
+
     } catch (error) {
       console.error("Sohbet başlatma hatası:", error);
       alert("Bir hata oluştu.");
@@ -71,9 +71,9 @@ function CourseDetailInfoCard({ courseName, description, instructorName, instruc
 
             <div className="d-grid gap-2 w-75">
               <button onClick={onEnroll} className="btn btn-danger fw-semibold infoCardJoinButton">Katıl</button>
-              
-              <button 
-                onClick={handleContactInstructor} 
+
+              <button
+                onClick={handleContactInstructor}
                 disabled={loading}
                 className="btn btn-outline-warning btn-sm infoCardContactButton"
               >

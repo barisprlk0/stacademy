@@ -81,7 +81,6 @@ function UserProfile({ currentUser }) {
             <div className="container mt-5 pb-5">
                 <div className="card shadow-sm border-0 rounded-4 p-4" style={{ backgroundColor: '#fff' }}>
                     <div className="row g-4 align-items-center">
-                        {/* Sol Taraf: Profil Resmi ve Temel Bilgiler */}
                         <div className="col-md-4 text-center border-end">
                             <img
                                 src={profileImage}
@@ -94,7 +93,6 @@ function UserProfile({ currentUser }) {
                             <span className="badge bg-danger rounded-pill px-3 py-2">Öğrenci</span>
                         </div>
 
-                        {/* Sağ Taraf: Detaylı Bilgiler */}
                         <div className="col-md-8">
                             <h4 className="fw-bold mb-4 text-dark border-bottom pb-2">Profil Detayları</h4>
 
@@ -136,7 +134,6 @@ function UserProfile({ currentUser }) {
                     </div>
                 </div>
 
-                {/* Verdiği Dersler Bölümü */}
                 {userCourses.length > 0 && (
                     <div className="mt-5">
                         <h4 className="fw-bold mb-4 text-dark">Verdiği Dersler</h4>
