@@ -36,8 +36,8 @@ function Navbar({currentUser}) {
                     <div className="navbar-profile">
                         <img src="https://picsum.photos/50/50" alt="Profile" className="navbar-profile-img" />
                         <div className="navbar-profile-info">
-                            <span className="navbar-profile-name"> {String(currentUser?.name) + " " + String(currentUser?.surname) } </span>
-                            <span className="navbar-profile-role ">Akdeniz Üniversitesi<br />CSE</span>
+                            <span className="navbar-profile-name"> AD SOYAD BİLGİSİ </span>
+                            <span className="navbar-profile-role ">ÜNİ BİLGİSİ <br />CSE</span>
                         </div>
                     </div>
                 )}
