@@ -3,6 +3,8 @@ import '../css/navbar.css';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../config/firebase.js';
 import { doc, getDoc } from 'firebase/firestore';
+import { signOut } from 'firebase/auth';
+import { auth } from '../config/firebase.js';
 
 
 function Navbar({currentUser}) {
@@ -43,6 +45,14 @@ function Navbar({currentUser}) {
     const goToLogin = () => {
         navigate('/login');
     };
+    const logout = () =>{
+        try{
+        signOut(auth);
+        }
+        catch(err){
+            console.error(err);
+        }
+    }
 
     const displayName = userProfile 
         ? `${userProfile.name || ''} ${userProfile.surname || ''}`.trim() 
@@ -56,8 +66,8 @@ function Navbar({currentUser}) {
         <div className="navbar mt-0" >
             <div className="navbar-brand navbar-link fw-bold" onClick={goToHome}>Ana Sayfa</div>
             <div className="navbar-center">
-                <a onClick={goToHome} className="navbar-link" >Ders Al</a>
                 <a href="#" className="navbar-link">Ders Ver</a>
+                <a href="#" onClick={logout} className="navbar-link">Çıkış Yap</a>
             </div>
 
 
