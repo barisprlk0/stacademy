@@ -464,7 +464,7 @@ const handleRegister = async() => {
                     </div>
 
 <div className="d-flex flex-column align-items-start mb-3">
-                        <h5 className="m-0 mx-2">Profil Fotoğrafı (Opsiyonel) </h5> 
+                        <h5 className="m-0 mx-2">Profil Fotoğrafı  </h5> 
                         <input 
                             type="file" 
                             id="profileImage" 
