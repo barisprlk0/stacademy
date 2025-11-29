@@ -377,13 +377,10 @@ const uploadImage = async (file, userId) => {
         if (!file) return null;
 
         try {
-            // Depolama yolunu oluştur: `profile_images/{userId}/profile.jpg`
             const storageRef = ref(storage, `profile_images/${userId}/profile`);
             
-            // Dosyayı yükle
             const snapshot = await uploadBytes(storageRef, file);
             
-            // Yüklenen dosyanın indirme URL'sini al
             const downloadURL = await getDownloadURL(snapshot.ref);
             
             return downloadURL;
@@ -395,27 +392,21 @@ const uploadImage = async (file, userId) => {
     };
 
 const handleRegister = async() => {
-        // Kontrollerde `profileImage` zorunlu olmadığı için sadece diğer alanları kontrol ediyoruz.
         if(name=="" || surname=="" || email=="" || password=="" || uni=="" || dep==""){
             alert("Lütfen tüm zorunlu alanları doldurunuz.");
             return;
         }
         
         try{
-            // 1. Firebase Auth ile Kullanıcı Oluşturma
             const userCredential= await createUserWithEmailAndPassword(auth, email, password);
             const userId = userCredential.user.uid;
             
             let photoURL = null;
 
-            // 2. Profil Fotoğrafını Yükleme (Opsiyonel)
             if(profileImage){
                 photoURL = await uploadImage(profileImage, userId);
-                // Fotoğraf yüklemesi başarısız olursa, kayıt işlemine devam edip fotoğraf alanını boş bırakabiliriz
-                // ya da kayıt işlemini tamamen durdurabiliriz. Burada devam etmeyi tercih ettik.
             }
 
-            // 3. Firestore'a Kullanıcı Verilerini Kaydetme
             const userDocref=(doc(db,"users", userId));
             await setDoc(userDocref,{
                 name: name,
@@ -423,7 +414,6 @@ const handleRegister = async() => {
                 email: email,
                 uni: uni,
                 dep: dep,
-                // Yüklenen fotoğrafın URL'sini Firestore'a kaydet
                 profilePictureUrl: photoURL, 
             })
 
@@ -478,11 +468,11 @@ const handleRegister = async() => {
                         <input 
                             type="file" 
                             id="profileImage" 
-                            accept="image/*" // Sadece görsel dosyaları kabul et
-                            onChange={(e) => setProfileImage(e.target.files[0])} // Seçilen dosyayı state'e kaydet
+                            accept="image/*" 
+                            onChange={(e) => setProfileImage(e.target.files[0])} 
                             className="authInput form-control w-100" 
                         />
-                        {/* Seçilen fotoğrafı önizlemek isterseniz buraya bir <img> ekleyebilirsiniz */}
+                        {}
                     </div>
 
 
