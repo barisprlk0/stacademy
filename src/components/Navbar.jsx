@@ -3,7 +3,7 @@ import '../css/navbar.css';
 import { useNavigate } from 'react-router-dom';
 
 
-function Navbar() {
+function Navbar({currentUser}) {
     const navigate = useNavigate();
     const goToHome = () => {
         navigate('/');
@@ -22,20 +22,25 @@ function Navbar() {
                 <a onClick={goToHome} className="navbar-link" >Ders Al</a>
                 <a href="#" className="navbar-link">Ders Ver</a>
             </div>
+
+
+
             <div className="navbar-right">
+        {currentUser ? (
                 
                     <div className="navbar-auth-links">
                         <a onClick={goToRegister} className="navbar-link">Kayıt Ol</a>
                         <a onClick={goToLogin} className="navbar-link">Giriş Yap</a>
                     </div>
-                
+              ) : (
                     <div className="navbar-profile">
                         <img src="https://picsum.photos/50/50" alt="Profile" className="navbar-profile-img" />
                         <div className="navbar-profile-info">
-                            <span className="navbar-profile-name">Barış Parlak</span>
+                            <span className="navbar-profile-name"> {String(currentUser?.name) + " " + String(currentUser?.surname) } </span>
                             <span className="navbar-profile-role ">Akdeniz Üniversitesi<br />CSE</span>
                         </div>
                     </div>
+                )}
             </div>
         </div>
     );

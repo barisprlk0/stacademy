@@ -60,7 +60,6 @@ const handleAddCourse = async () => {
         }
 
         try {
-            // 1. Önce resmi yükleyip URL'sini alalım
             let uploadedImageUrl = ""; 
             if (courseImage) {
                 uploadedImageUrl = await uploadImage(courseImage, currentUser.uid);
@@ -76,14 +75,13 @@ const handleAddCourse = async () => {
                 courseDescription: courseDescription,
                 courseIntroduction: courseIntroduction,
                 courseLevel: courseLevel,
-                enrollSize: Number(enrollSize), // Sayıya çevirerek kaydediyoruz
+                enrollSize: Number(enrollSize), 
                 courseParticipants: [],
                 
-                // DÜZELTİLEN KISIM: Dosyayı değil, Storage'dan gelen URL'i kaydediyoruz
                 courseImage: uploadedImageUrl, 
 
                 instructorUid: currentUser.uid,
-                createdAt: new Date() // Oluşturulma tarihini eklemek iyi bir pratiktir
+                createdAt: new Date()
             });
 
             alert("Kurs başarıyla eklendi.");
