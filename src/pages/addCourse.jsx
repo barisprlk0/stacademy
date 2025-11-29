@@ -2,10 +2,99 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar.jsx';
 import ManImage from '../assets/addCourseMan.png';
+import { useState } from 'react';
+import { db } from '../config/firebase.js';
+import { doc, setDoc } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../config/firebase.js';
+import { auth } from '../config/firebase.js';
+
+
+
+
+
 
 function AddCourse() {
+    const [courseName, setCourseName] = useState('');
+    const [courseCategory, setCourseCategory] = useState('');
+    const [courseDescription, setCourseDescription] = useState('');
+    const [courseIntroduction, setCourseIntroduction] = useState('');
+    const [courseImage, setCourseImage] = useState(null);
+    const [courseLevel, setCourseLevel] = useState('');
+    const [courseParticipants, setCourseParticipants] = useState([]);
+    const [enrollSize, setEnrollSize] = useState(0);
+   
+
+    const uploadImage = async (file, userUid) => {
+        if (!file) return null;
+    
+        try {
+            const storageRef = ref(storage, `course_images/${userUid}/course`);
+            
+            const snapshot = await uploadBytes(storageRef, file);
+            
+            const downloadURL = await getDownloadURL(snapshot.ref);
+            
+            return downloadURL;
+        } catch (error) {
+            console.error("Fotoğraf yüklenirken hata oluştu:", error);
+            alert("Profil fotoğrafı yüklenirken bir hata oluştu.");
+            return null;
+        }
+    };
+
+    const handleAddCourse = async() => {
+        const currentUser = auth.currentUser;
+    
+            if (!currentUser) {
+                alert("Oturum açmanız gerekiyor!");
+                return;
+            }
+        const navigate = useNavigate();
+        if(courseName=="" || courseCategory=="" || courseDescription=="" || courseIntroduction=="" || courseImage=="" || courseLevel=="" || enrollSize==""){
+            alert("Lütfen tüm alanları doldurunuz.");
+            return;
+        }
+        try{
+            
+            let courseImageUrl = null;
+    
+            if(courseImage){
+                courseImageUrl = await uploadImage(courseImage, currentUser.uid);
+            }
+            
+    
+            const courseRef = collection(db, "courses");
+            await addDoc(courseRef, {
+                courseName: courseName,
+                courseCategory: courseCategory,
+                courseDescription: courseDescription,
+                courseIntroduction: courseIntroduction,
+                courseImage: courseImage,
+                courseLevel: courseLevel,
+                courseParticipants: [],
+                courseImage: courseImage,
+    
+                instructorUid: currentUser.uid,
+            });
+            alert("Kurs başarıyla eklendi.");
+            navigate("/");
+        
+        } catch (error) {
+            console.error("Kurs ekleme hatası:", error);
+            alert("Kurs ekleme hatası oluştu.");
+        }
+    }
+
+
+
+
+
+
+
     return (
-        <div style={{ backgroundColor: "#f0f2f5", minHeight: "100vh" }}>
+        <div>
             <Navbar />
             
             <div className="container mt-4">
@@ -22,12 +111,12 @@ function AddCourse() {
                             
                             <div className="row mb-3  ">
                                 <div className="col-md-6  flex-column d-flex align-items-start">
-                                    <label className="form-label" style={{ fontWeight: "500" }}>Kurs Adı</label>
-                                    <input type="text" className="form-control" placeholder="Web Programlama" />
+                                    <label htmlFor="courseName" className="form-label" style={{ fontWeight: "500"  }}>Kurs Adı</label>
+                                    <input className="form-control" value={courseName} onChange={(e)=>setCourseName(e.target.value)} type="text"  placeholder="Web Programlama"  id="courseName" />
                                 </div>
                                 <div className="col-md-6 d-flex flex-column d-flex align-items-start">
-                                    <label className="form-label" style={{ fontWeight: "500" }}>Kategori</label>
-                                    <select className="form-select form-control">
+                                    <label htmlFor="courseCategory" className="form-label" style={{ fontWeight: "500" }}>Kategori</label>
+                                    <select id="courseCategory" value={courseCategory} onChange={(e)=>setCourseCategory(e.target.value)} className="form-select form-control">
                                         <option value="">Seçiniz</option>
                                         <option value="Kodlama">Kodlama</option>
                                         <option value="Tasarım">Tasarım</option>
@@ -39,18 +128,20 @@ function AddCourse() {
                             </div>
 
                             <div className="mb-3 d-flex flex-column align-items-start">
-                                <label className="form-label" style={{ fontWeight: "500" }}>Kurs Açıklaması</label>
-                                <textarea 
-                                    className="form-control" 
+                                <label htmlFor="courseDescription" className="form-label" style={{ fontWeight: "500" }}>Kurs Açıklaması</label>
+                                <textarea
+                                    id="courseDescription"
+                                    value={courseDescription} onChange={(e)=>setCourseDescription(e.target.value)} className="form-control" 
                                     rows="5" 
                                     placeholder="Kursunuzun detaylı açıklamasını giriniz..."
                                 ></textarea>
                             </div>
 
                             <div className="mb-3 d-flex flex-column align-items-start">
-                                <label className="form-label" style={{ fontWeight: "500" }}>Kurs Tanıtımı</label>
+                                <label htmlFor="courseIntroduction" className="form-label" style={{ fontWeight: "500" }}>Kurs Tanıtımı</label>
                                 <textarea 
-                                    className="form-control" 
+                                    id="courseIntroduction"
+                                    value={courseIntroduction} onChange={(e)=>setCourseIntroduction(e.target.value)} className="form-control" 
                                     rows="2" 
                                     placeholder="Kursunuzun kısa tanıtımını giriniz..."
                                 ></textarea>
@@ -59,14 +150,14 @@ function AddCourse() {
            
 
                             <div className="mb-3">
-                                <label className="form-label d-flex flex-column align-items-start " style={{ fontWeight: "500" }}>Kapak Görseli Yükle</label>
+                                <label htmlFor="courseImage" className="form-label d-flex flex-column align-items-start " style={{ fontWeight: "500" }}>Kapak Görseli Yükle</label>
                                 <div className="d-flex justify-content-between align-items-center p-3" 
                                      style={{ border: "2px dashed #ced4da", borderRadius: "5px", backgroundColor: "#f8f9fa" }}>
                                     <div className="d-flex align-items-center text-muted">
                                         <span style={{ fontSize: "24px", marginRight: "10px" }}>&#8679;</span> 
                                         <span>Görsel Yükle</span>
                                     </div>
-                                    <input id="courseImage" accept='image/' className='form-control' type="file" />
+                                    <input id="courseImage" accept='image/' className='form-control' type="file"  onChange={(e)=>setCourseImage(e.target.files[0])}/>
                                 </div>
                             </div>
 
@@ -74,32 +165,32 @@ function AddCourse() {
                                 <div className="col-md-8 d-flex align-items-center">
                                     <span style={{ fontWeight: "500", marginRight: "15px" }}>Kurs Seviyesi:</span>
                                     <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="level" id="baslangic" />
+                                        <input className="form-check-input" type="radio" name="level" id="baslangic" value="Başlangıç" onChange={(e)=>setCourseLevel(e.target.value)} />
                                         <label className="form-check-label" htmlFor="baslangic">Başlangıç</label>
                                     </div>
                                     <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="level" id="orta" />
+                                        <input className="form-check-input"  type="radio" name="level" id="orta" value="Orta" onChange={(e)=>setCourseLevel(e.target.value)} />
                                         <label className="form-check-label" htmlFor="orta">Orta</label>
                                     </div>
                                     <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="level" id="ileri" />
+                                        <input className="form-check-input" type="radio" name="level" id="ileri" value="İleri" onChange={(e)=>setCourseLevel(e.target.value)} />
                                         <label className="form-check-label" htmlFor="ileri">İleri</label>
                                     </div>
                                 </div>
                                 <div className="col-md-4 d-flex align-items-center">
-                                    <span style={{ fontWeight: "500", marginRight: "10px", whiteSpace: 'nowrap' }}>Çırak Sayısı:</span>
-                                    <select className="form-control" style={{ width: "70px" }}>
-                                        <option>0</option>
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
+                                    <label htmlFor="enrollSize" className="form-label" style={{ fontWeight: "500", marginRight: "10px", whiteSpace: 'nowrap' }}>Çırak Sayısı:</label>
+                                    <select  id="enrollSize" value={enrollSize} onChange={(e)=>setEnrollSize(e.target.value)} className="form-control" style={{ width: "70px" }}>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
                                     </select>
                                 </div>
                             </div>
 
-                            <button className="btn btn-primary w-100 py-2" style={{ backgroundColor: "#5469d4", borderColor: "#5469d4", fontWeight: "600" }}>
+                            <button onClick={handleAddCourse} className="btn btn-primary w-100 py-2" style={{ backgroundColor: "#5469d4", borderColor: "#5469d4", fontWeight: "600" }}>
                                 Kursu Oluştur
                             </button>
 
