@@ -15,13 +15,18 @@ function MainCardComponent({ course, instructorName, instructorImage }) {
   const courseImageUrl = course?.courseImage || 'https://picsum.photos/350/220';
   const courseName = course?.courseName || 'Kurs Adı';
   const enrollSize = course?.enrollSize || 0;
+  const courseLevel=course?.courseLevel || "(Belirtilmedi)";
 
   return (
     <div className="card m-0 p-0 customCard pb-3 ">
-      <img src={courseImageUrl} className="card-img-top customImage p-0 m-0" alt={courseName}></img>
+      <img src={courseImageUrl} className="card-img-top customImage p-0 m-0 " style={{height:'200px'}} alt={courseName}></img>
       <h3 className="text-start ms-2 mb-0">{courseName}</h3>
+    <div className="d-flex flex-row">
 
       <span className="badge py-2 px-2 ms-2 mt-0 customBadge" alt="asdsa"> {enrollSize} Çırak </span>
+      <span className="badge py-2 px-2 ms-2 mt-0 customBadge bg-success" alt="asdsa"> {courseLevel} </span>
+    </div>
+
       <div className="profileWithButton mt-2">
         <div className="profile">
           <img src={profileImageUrl} className="profileImage" alt="profile"></img>

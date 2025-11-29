@@ -6,6 +6,9 @@ import { doc, getDoc } from 'firebase/firestore';
 
 
 function Navbar({currentUser}) {
+
+
+
     const navigate = useNavigate();
     const [userProfile, setUserProfile] = useState(null);
     const [loading, setLoading] = useState(true);

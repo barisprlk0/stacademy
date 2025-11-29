@@ -25,18 +25,18 @@ function AddCourse({ currentUser }) {
     const [courseLevel, setCourseLevel] = useState('');
     const [courseParticipants, setCourseParticipants] = useState([]);
     const [enrollSize, setEnrollSize] = useState(0);
-   
+
 
     const uploadImage = async (file, userUid) => {
         if (!file) return null;
-    
+
         try {
-            const storageRef = ref(storage, `course_images/${userUid}/course`);
-            
+            const storageRef = ref(storage, `course_images/${userUid}/course_${Date.now()}_${file.name}`);
+
             const snapshot = await uploadBytes(storageRef, file);
-            
+
             const downloadURL = await getDownloadURL(snapshot.ref);
-            
+
             return downloadURL;
         } catch (error) {
             console.error("Fotoğraf yüklenirken hata oluştu:", error);
@@ -45,7 +45,7 @@ function AddCourse({ currentUser }) {
         }
     };
 
-const handleAddCourse = async () => {
+    const handleAddCourse = async () => {
         const currentUser = auth.currentUser;
 
         if (!currentUser) {
@@ -59,23 +59,23 @@ const handleAddCourse = async () => {
         }
 
         try {
-            let uploadedImageUrl = ""; 
+            let uploadedImageUrl = "";
             if (courseImage) {
                 uploadedImageUrl = await uploadImage(courseImage, currentUser.uid);
             }
 
             const courseRef = collection(db, "courses");
-            
+
             await addDoc(courseRef, {
                 courseName: courseName,
                 courseCategory: courseCategory,
                 courseDescription: courseDescription,
                 courseIntroduction: courseIntroduction,
                 courseLevel: courseLevel,
-                enrollSize: Number(enrollSize), 
+                enrollSize: Number(enrollSize),
                 courseParticipants: [],
-                
-                courseImage: uploadedImageUrl, 
+
+                courseImage: uploadedImageUrl,
 
                 instructorUid: currentUser.uid,
                 createdAt: new Date()
@@ -99,7 +99,7 @@ const handleAddCourse = async () => {
     return (
         <div>
             <Navbar currentUser={currentUser} />
-            
+
             <div className="container mt-4">
                 <div className="row mb-3">
                     <div className="col-12">
@@ -111,15 +111,15 @@ const handleAddCourse = async () => {
                 <div className="card shadow-sm border-0 p-4 mb-5" style={{ borderRadius: "15px" }}>
                     <div className="row">
                         <div className="col-lg-7 col-md-12">
-                            
+
                             <div className="row mb-3  ">
                                 <div className="col-md-6  flex-column d-flex align-items-start">
-                                    <label htmlFor="courseName" className="form-label" style={{ fontWeight: "500"  }}>Kurs Adı</label>
-                                    <input className="form-control" value={courseName} onChange={(e)=>setCourseName(e.target.value)} type="text"  placeholder="Web Programlama"  id="courseName" />
+                                    <label htmlFor="courseName" className="form-label" style={{ fontWeight: "500" }}>Kurs Adı</label>
+                                    <input className="form-control" value={courseName} onChange={(e) => setCourseName(e.target.value)} type="text" placeholder="Web Programlama" id="courseName" />
                                 </div>
                                 <div className="col-md-6 d-flex flex-column d-flex align-items-start">
                                     <label htmlFor="courseCategory" className="form-label" style={{ fontWeight: "500" }}>Kategori</label>
-                                    <select id="courseCategory" value={courseCategory} onChange={(e)=>setCourseCategory(e.target.value)} className="form-select form-control">
+                                    <select id="courseCategory" value={courseCategory} onChange={(e) => setCourseCategory(e.target.value)} className="form-select form-control">
                                         <option value="">Seçiniz</option>
                                         <option value="Kodlama">Kodlama</option>
                                         <option value="Tasarım">Tasarım</option>
@@ -134,33 +134,33 @@ const handleAddCourse = async () => {
                                 <label htmlFor="courseDescription" className="form-label" style={{ fontWeight: "500" }}>Kurs Açıklaması</label>
                                 <textarea
                                     id="courseDescription"
-                                    value={courseDescription} onChange={(e)=>setCourseDescription(e.target.value)} className="form-control" 
-                                    rows="5" 
+                                    value={courseDescription} onChange={(e) => setCourseDescription(e.target.value)} className="form-control"
+                                    rows="5"
                                     placeholder="Kursunuzun detaylı açıklamasını giriniz..."
                                 ></textarea>
                             </div>
 
                             <div className="mb-3 d-flex flex-column align-items-start">
                                 <label htmlFor="courseIntroduction" className="form-label" style={{ fontWeight: "500" }}>Kurs Tanıtımı</label>
-                                <textarea 
+                                <textarea
                                     id="courseIntroduction"
-                                    value={courseIntroduction} onChange={(e)=>setCourseIntroduction(e.target.value)} className="form-control" 
-                                    rows="2" 
+                                    value={courseIntroduction} onChange={(e) => setCourseIntroduction(e.target.value)} className="form-control"
+                                    rows="2"
                                     placeholder="Kursunuzun kısa tanıtımını giriniz..."
                                 ></textarea>
                             </div>
 
-           
+
 
                             <div className="mb-3">
                                 <label htmlFor="courseImage" className="form-label d-flex flex-column align-items-start " style={{ fontWeight: "500" }}>Kapak Görseli Yükle</label>
-                                <div className="d-flex justify-content-between align-items-center p-3" 
-                                     style={{ border: "2px dashed #ced4da", borderRadius: "5px", backgroundColor: "#f8f9fa" }}>
+                                <div className="d-flex justify-content-between align-items-center p-3"
+                                    style={{ border: "2px dashed #ced4da", borderRadius: "5px", backgroundColor: "#f8f9fa" }}>
                                     <div className="d-flex align-items-center text-muted">
-                                        <span style={{ fontSize: "24px", marginRight: "10px" }}>&#8679;</span> 
+                                        <span style={{ fontSize: "24px", marginRight: "10px" }}>&#8679;</span>
                                         <span>Görsel Yükle</span>
                                     </div>
-                                    <input id="courseImage" accept='image/' className='form-control' type="file"  onChange={(e)=>setCourseImage(e.target.files[0])}/>
+                                    <input id="courseImage" accept='image/' className='form-control' type="file" onChange={(e) => setCourseImage(e.target.files[0])} />
                                 </div>
                             </div>
 
@@ -168,21 +168,21 @@ const handleAddCourse = async () => {
                                 <div className="col-md-8 d-flex align-items-center">
                                     <span style={{ fontWeight: "500", marginRight: "15px" }}>Kurs Seviyesi:</span>
                                     <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="level" id="baslangic" value="Başlangıç" onChange={(e)=>setCourseLevel(e.target.value)} />
+                                        <input className="form-check-input" type="radio" name="level" id="baslangic" value="Başlangıç" onChange={(e) => setCourseLevel(e.target.value)} />
                                         <label className="form-check-label" htmlFor="baslangic">Başlangıç</label>
                                     </div>
                                     <div className="form-check form-check-inline">
-                                        <input className="form-check-input"  type="radio" name="level" id="orta" value="Orta" onChange={(e)=>setCourseLevel(e.target.value)} />
+                                        <input className="form-check-input" type="radio" name="level" id="orta" value="Orta" onChange={(e) => setCourseLevel(e.target.value)} />
                                         <label className="form-check-label" htmlFor="orta">Orta</label>
                                     </div>
                                     <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="level" id="ileri" value="İleri" onChange={(e)=>setCourseLevel(e.target.value)} />
+                                        <input className="form-check-input" type="radio" name="level" id="ileri" value="İleri" onChange={(e) => setCourseLevel(e.target.value)} />
                                         <label className="form-check-label" htmlFor="ileri">İleri</label>
                                     </div>
                                 </div>
                                 <div className="col-md-4 d-flex align-items-center">
                                     <label htmlFor="enrollSize" className="form-label" style={{ fontWeight: "500", marginRight: "10px", whiteSpace: 'nowrap' }}>Çırak Sayısı:</label>
-                                    <select  id="enrollSize" value={enrollSize} onChange={(e)=>setEnrollSize(e.target.value)} className="form-control" style={{ width: "70px" }}>
+                                    <select id="enrollSize" value={enrollSize} onChange={(e) => setEnrollSize(e.target.value)} className="form-control" style={{ width: "70px" }}>
                                         <option value="0">0</option>
                                         <option value="1">1</option>
                                         <option value="2">2</option>
