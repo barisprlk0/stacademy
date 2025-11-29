@@ -8,6 +8,7 @@ import { BiMath } from "react-icons/bi";
 import { FaPaintBrush, FaGuitar } from "react-icons/fa";
 import { db } from '../config/firebase.js';
 import { collection, getDocs, query, orderBy, limit, doc, getDoc } from 'firebase/firestore';
+import ChatWidget from '../components/ChatWidget.jsx';
 
 function MainPage({ currentUser }) {
   const [courses, setCourses] = useState([]);
@@ -162,6 +163,7 @@ function MainPage({ currentUser }) {
           </div>
         </div>
       </div>
+      <ChatWidget currentUser={currentUser} />
     </div>
   );
 }

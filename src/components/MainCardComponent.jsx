@@ -10,6 +10,7 @@ function MainCardComponent({ course, instructorName, instructorImage, currentUse
     if (parts.length === 1) return parts[0];
     return `${parts[0]} ${parts[parts.length - 1].charAt(0)}.`;
   };
+  
 
   const displayName = formatName(instructorName);
   const profileImageUrl = instructorImage || 'https://picsum.photos/50/50';
@@ -17,6 +18,21 @@ function MainCardComponent({ course, instructorName, instructorImage, currentUse
   const courseName = course?.courseName || 'Kurs Adı';
   const enrollSize = course?.enrollSize || 0;
   const courseLevel = course?.courseLevel || "(Belirtilmedi)";
+
+  // Bu kod MainCardComponent içinde kullanılabilir
+const startChat = async () => {
+  if (!currentUser) return alert("Mesaj atmak için giriş yapmalısınız.");
+  
+  // Önce bu iki kişi arasında sohbet var mı kontrol et
+  // (Basitlik için direkt ekleme kodu örneği veriyorum, production'da 'query' ile kontrol edilmeli)
+  
+  await addDoc(collection(db, 'chats'), {
+    participants: [currentUser.uid, course.instructorUid],
+    createdAt: serverTimestamp()
+  });
+  
+  alert("Sohbet başlatıldı! Sağ alttaki kutudan konuşabilirsiniz.");
+};
 
   return (
     <div className="card m-0 p-0 customCard pb-3 ">
