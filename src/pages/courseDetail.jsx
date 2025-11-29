@@ -1,68 +1,107 @@
-import React from 'react';
-import Navbar from '../components/Navbar.jsx'; 
-import CourseDetailInfoCard from '../components/courseDetailInfoCard.jsx'; 
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { db } from '../config/firebase.js';
+import { doc, getDoc } from 'firebase/firestore';
+import Navbar from '../components/Navbar.jsx';
+import CourseDetailInfoCard from '../components/courseDetailInfoCard.jsx';
 
 const CourseDetailPage = ({ currentUser }) => {
+  const { id } = useParams();
+  const [course, setCourse] = useState(null);
+  const [instructor, setInstructor] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      if (!id) return;
+      try {
+        const courseDoc = await getDoc(doc(db, "courses", id));
+        if (courseDoc.exists()) {
+          const courseData = courseDoc.data();
+          setCourse(courseData);
+
+          if (courseData.instructorUid) {
+            const instructorDoc = await getDoc(doc(db, "users", courseData.instructorUid));
+            if (instructorDoc.exists()) {
+              setInstructor(instructorDoc.data());
+            }
+          }
+        } else {
+          console.log("No cocoruseurse");
+        }
+      } catch (error) {
+        console.error("Kurs detayları gelmemesi: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourseData();
+  }, [id]);
+
+  if (loading) {
+    return <div className="d-flex justify-content-center align-items-center min-vh-100">Yükleniyor...</div>;
+  }
+
+  if (!course) {
+    return <div className="d-flex justify-content-center align-items-center min-vh-100">404</div>;
+  }
+
   return (
     <div className="bg-light min-vh-100 pb-5">
       <Navbar currentUser={currentUser} />
 
-      <div 
-        style={{ 
-          height: '350px', 
+      <div
+        style={{
+          height: '350px',
           width: '100%',
-          backgroundImage: 'url("https://img.freepik.com/free-vector/gradient-background-futuristic-technology-concept_23-2149122394.jpg")', 
+          backgroundImage: `url("${course.courseImage || 'https://img.freepik.com/free-vector/gradient-background-futuristic-technology-concept_23-2149122394.jpg'}")`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           position: 'relative'
         }}
       >
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.1)' }}></div>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)' }}></div>
       </div>
 
       <div className="container">
         <div style={{ marginTop: '-120px', position: 'relative', zIndex: 10 }}>
-            <CourseDetailInfoCard />
+          <CourseDetailInfoCard
+            courseName={course.courseName}
+            description={course.courseIntroduction}
+            instructorName={instructor ? `${instructor.name} ${instructor.surname}` : "Eğitmen Bilgisi Yok"}
+            instructorImage={instructor?.profileImage}
+          />
         </div>
 
         <div className="row g-4 mt-2">
-          
+
           <div className="col-lg-8">
             <div className="card shadow-sm border-0 rounded-4 p-4 h-100">
-      <h4 className="fw-bold mb-3">Kurs Açıklaması</h4>
-      <div className="text-muted">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. In semper consequat varius. 
-          Praesent a tortor tellus. Phasellus id augue eros. Aenean molestie blandit eleifend. 
-          Pellentesque a turpis erat. Vestibulum condimentum, sem at viverra elementum, 
-          nulla erat ultrices diam, et feugiat eros ex et urna.
-        </p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sodales euismod erat 
-          vitae ultrices. Sed nec lectus rhoncus, blandit sapien in, vehicula mauris. Nam congue 
-          sit amet arcu in euismod. Phasellus vel ultricies erat, sit amet suscipit ipsum. 
-          Praesent et fringilla purus. Cras et egestas felis, sit amet ultricies dui.
-        </p>
-      </div>
-    </div>
+              <h4 className="fw-bold mb-3">Kurs Açıklaması</h4>
+              <div className="text-muted">
+                <p>
+                  {course.courseDescription || "Bu kurs için henüz bir açıklama girilmemiş."}
+                </p>
+              </div>
+            </div>
           </div>
-
+          
           <div className="col-lg-4">
             <div className="card shadow-sm border-0 rounded-4 p-4 mb-4 text-center">
-      <div className="d-flex justify-content-center mb-3">
-        <img 
-          src="https://picsum.photos/id/64/200/200" 
-          alt="Instructor" 
-          className="rounded-circle"
-          style={{ width: '100px', height: '100px', objectFit: 'cover' }}
-        />
-      </div>
-      <h4 className="fw-bold mb-1">Murat Kazancıoğlu</h4>
-      <p className="text-muted small mb-3">
-        Akdeniz Üniversitesi Bilgisayar Mühendisliği öğrencisiyim. 
-        Bildiklerimi siz arkadaşlarımla paylaşmaktan mutluluk duyarım.
-      </p>
-    </div>
+              <div className="d-flex justify-content-center mb-3">
+                <img
+                  src={instructor?.profileImage || "https://picsum.photos/200/200"}
+                  alt="Instructor"
+                  className="rounded-circle"
+                  style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                />
+              </div>
+              <h4 className="fw-bold mb-1">{instructor ? `${instructor.name} ${instructor.surname}` : "Eğitmen"}</h4>
+              <p className="text-muted small mb-3">
+                {instructor?.university ? `${instructor.university} - ${instructor.department}` : "Eğitmen bilgileri yükleniyor..."}
+              </p>
+            </div>
           </div>
 
         </div>
