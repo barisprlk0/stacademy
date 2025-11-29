@@ -86,6 +86,7 @@ function Navbar({ currentUser }) {
                                 <div className="text-end d-none d-sm-block lh-1">
                                     <div className="fw-bold text-dark" style={{ fontSize: '0.9rem' }}>{displayName}</div>
                                     <div className="text-muted" style={{ fontSize: '0.75rem' }}>{displayUni}</div>
+                                    <div className="text-muted" style={{ fontSize: '0.75rem' }}>{displayDep}</div>
                                 </div>
                                 <img
                                     src={profileImage}
